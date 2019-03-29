@@ -1,6 +1,22 @@
 <resources>
     <string name="app_name">FindMe</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="authorization">Авторизация</string>
+    <string name="make_auth">Авторизоваться</string>
+    <string name="registration">Регистрация</string>
+    <string name="email">Email</string>
+    <string name="password">Пароль</string>
+    <string name="email_hint">Введите Email</string>
+    <string name="password_hint">Введите пароль</string>
+    <string name="empty_email_error">Введите корректный Email</string>
+    <string name="empty_password_error">Введите пароль</string>
+    <string name="confirm_password">Подтвердите пароль</string>
+    <string name="confirm_password_hint">Введите подтверждение пароля</string>
+    <string name="make_registration">Зарегистрироваться</string>
+    <string name="build_route">Построить маршрут</string>
+    <string name="add_route">Добавить маршрут</string>
+    <string name="attributes_list">Список атриубтов</string>
+    <string name="add_attribute">Добавить атрибут</string>
+    <string name="logout">Выйти из аккаунта</string>
+
+
 </resources>

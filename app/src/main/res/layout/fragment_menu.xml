@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/llMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/llBuildRoute"
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/default_side_margin"
+                app:srcCompat="@drawable/ic_map" />
+
+            <TextView
+                style="@style/PrimaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/default_side_margin"
+                android:layout_marginEnd="@dimen/default_side_margin"
+                android:text="@string/build_route" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/default_side_margin"
+            android:layout_marginEnd="@dimen/default_side_margin"
+            android:background="@color/gray" />
+
+        <LinearLayout
+            android:id="@+id/llAddRoute"
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/default_side_margin"
+                app:srcCompat="@drawable/ic_add_location" />
+
+            <TextView
+                style="@style/PrimaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/default_side_margin"
+                android:layout_marginEnd="@dimen/default_side_margin"
+                android:text="@string/add_route" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/default_side_margin"
+            android:layout_marginEnd="@dimen/default_side_margin"
+            android:background="@color/gray" />
+
+        <LinearLayout
+            android:id="@+id/llAttributes"
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/default_side_margin"
+                app:srcCompat="@drawable/ic_list" />
+
+            <TextView
+                style="@style/PrimaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/default_side_margin"
+                android:layout_marginEnd="@dimen/default_side_margin"
+                android:text="@string/attributes_list" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/default_side_margin"
+            android:layout_marginEnd="@dimen/default_side_margin"
+            android:background="@color/gray" />
+
+        <LinearLayout
+            android:id="@+id/llAddAttribute"
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/default_side_margin"
+                app:srcCompat="@drawable/ic_add_circle" />
+
+            <TextView
+                style="@style/PrimaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/default_side_margin"
+                android:layout_marginEnd="@dimen/default_side_margin"
+                android:text="@string/add_attribute" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/default_side_margin"
+            android:layout_marginEnd="@dimen/default_side_margin"
+            android:background="@color/gray" />
+
+        <LinearLayout
+            android:id="@+id/llLogout"
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/default_side_margin"
+                app:srcCompat="@drawable/ic_exit_to_app" />
+
+            <TextView
+                style="@style/PrimaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/default_side_margin"
+                android:layout_marginEnd="@dimen/default_side_margin"
+                android:text="@string/logout" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/default_side_margin"
+            android:layout_marginEnd="@dimen/default_side_margin"
+            android:background="@color/gray" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        style="@style/LoadingProgressBar" />
+
+</FrameLayout>
