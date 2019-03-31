@@ -4,6 +4,7 @@ package ru.debian17.findme.app.ui.auth
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +15,14 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_auth.*
 import ru.debian17.findme.R
 import ru.debian17.findme.app.App
+import ru.debian17.findme.app.ext.hide
+import ru.debian17.findme.app.ext.hideKeyboard
+import ru.debian17.findme.app.ext.longSnackBar
+import ru.debian17.findme.app.ext.show
 import ru.debian17.findme.app.mvp.BaseFragment
 import ru.debian17.findme.app.ui.menu.MenuFragment
 import ru.debian17.findme.app.ui.auth.registration.RegistrationFragment
+import ru.debian17.findme.data.network.error.ErrorCode
 
 
 class AuthFragment : BaseFragment(), AuthView {
@@ -51,7 +57,25 @@ class AuthFragment : BaseFragment(), AuthView {
         super.onViewCreated(view, savedInstanceState)
 
         btnAuth.setOnClickListener {
-            navigator.replaceScreen(MenuFragment.TAG)
+            val email = etEmail.text.toString().trim()
+
+            val isEmail = Patterns.EMAIL_ADDRESS.matcher(email).matches()
+
+            if (!isEmail) {
+                view.longSnackBar(getString(R.string.email_validation_error))
+                return@setOnClickListener
+            }
+
+            val password = etPassword.text.toString().trim()
+
+            if (password.isEmpty()) {
+                view.longSnackBar(getString(R.string.password_empty_error))
+                return@setOnClickListener
+            }
+
+            view.hideKeyboard()
+            presenter.auth(email, password)
+
         }
 
         btnRegistration.setOnClickListener {
@@ -90,12 +114,28 @@ class AuthFragment : BaseFragment(), AuthView {
         }
     }
 
-    override fun showLoading() {
+    override fun onAuthError(code: Int) {
+        when (code) {
+            ErrorCode.VALIDATION -> {
+                view?.longSnackBar(getString(R.string.validation_error))
+            }
+            ErrorCode.USER_NOT_FOUND -> {
+                view?.longSnackBar(getString(R.string.user_not_found))
+            }
+            ErrorCode.UNKNOWN_ERROR -> {
+                view?.longSnackBar(getString(R.string.default_error_message))
+            }
+        }
+    }
 
+    override fun showLoading() {
+        pbLoading.show()
+        llMain.hide()
     }
 
     override fun showMain() {
-
+        llMain.show()
+        pbLoading.hide()
     }
 
     override fun showError(errorMessage: String?) {

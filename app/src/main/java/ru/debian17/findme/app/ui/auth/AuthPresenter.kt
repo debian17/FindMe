@@ -5,6 +5,7 @@ import ru.debian17.findme.app.dal.AuthDataSource
 import ru.debian17.findme.app.ext.observeOnUI
 import ru.debian17.findme.app.ext.subscribeOnIO
 import ru.debian17.findme.app.mvp.BasePresenter
+import java.util.concurrent.TimeUnit
 
 @InjectViewState
 class AuthPresenter(private val authDataSource: AuthDataSource) : BasePresenter<AuthView>() {
@@ -15,11 +16,11 @@ class AuthPresenter(private val authDataSource: AuthDataSource) : BasePresenter<
                 authDataSource.isUserLogin()
                         .subscribeOnIO()
                         .observeOnUI()
-                        .subscribe(this::onAuthSuccess, this::onAuthError)
+                        .subscribe(this::onLoginSuccess, this::onLoginError)
         )
     }
 
-    private fun onAuthSuccess(isUserLogin: Boolean) {
+    private fun onLoginSuccess(isUserLogin: Boolean) {
         if (isUserLogin) {
             viewState.showMenu()
         } else {
@@ -28,8 +29,28 @@ class AuthPresenter(private val authDataSource: AuthDataSource) : BasePresenter<
         }
     }
 
-    private fun onAuthError(throwable: Throwable) {
+    private fun onLoginError(throwable: Throwable) {
 
+    }
+
+    fun auth(email: String, password: String) {
+        viewState.showLoading()
+        unsubscribeOnDestroy(authDataSource.auth(email, password)
+                .subscribeOnIO()
+                .doOnError {
+                    errorBody = getError(it)
+                }
+                .observeOnUI()
+                .subscribe(this::onAuthSuccess, this::onAuthError))
+    }
+
+    private fun onAuthSuccess() {
+        viewState.showMenu()
+    }
+
+    private fun onAuthError(throwable: Throwable) {
+        viewState.showMain()
+        viewState.onAuthError(errorBody.code)
     }
 
 }

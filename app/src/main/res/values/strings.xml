@@ -17,6 +17,15 @@
     <string name="attributes_list">Список атриубтов</string>
     <string name="add_attribute">Добавить атрибут</string>
     <string name="logout">Выйти из аккаунта</string>
-
+    <string name="registration_success">Регистрация прошла успешно</string>
+    <string name="email_already_exist">Пользователь с таким Email уже существует</string>
+    <string name="validation_error">Введены некорректные данные</string>
+    <string name="email_validation_error">Введите корректный Email</string>
+    <string name="password_empty_error">Введите пароль</string>
+    <string name="password_length_error">Длина пароля должна быть не менее 5 символов</string>
+    <string name="confirm_password_empty_error">Введите подтверждение пароля</string>
+    <string name="password_confirm_different">Пароль и подтверждение не совпадают</string>
+    <string name="default_error_message">Произошла неизвестная ошибка</string>
+    <string name="user_not_found">Пользователь с таким Email не зарегистрирован</string>
 
 </resources>

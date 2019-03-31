@@ -12,4 +12,7 @@ interface AuthView : BaseView {
     @StateStrategyType(OneExecutionStateStrategy::class)
     fun checkPermission()
 
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun onAuthError(code: Int)
+
 }

@@ -1,7 +1,9 @@
 package ru.debian17.findme.app.ext
 
+import android.content.Context
 import android.view.View
 import android.view.animation.AlphaAnimation
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.UiThread
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.Completable
@@ -30,6 +32,15 @@ fun View.hide(duration: Long = 300L) {
 fun View.longSnackBar(message: String?) {
     val m = message ?: return
     Snackbar.make(this, m, Snackbar.LENGTH_LONG).show()
+}
+
+fun View.hideKeyboard(): Boolean {
+    return try {
+        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
+    } catch (ignored: RuntimeException) {
+        false
+    }
 }
 
 fun <T> Single<T>.subscribeOnIO(): Single<T> = subscribeOn(Schedulers.io())
