@@ -27,5 +27,10 @@
     <string name="password_confirm_different">Пароль и подтверждение не совпадают</string>
     <string name="default_error_message">Произошла неизвестная ошибка</string>
     <string name="user_not_found">Пользователь с таким Email не зарегистрирован</string>
+    <string name="current_location">Текущее местоположение</string>
+    <string name="start_point">Начальная точка</string>
+    <string name="end_point">Конечная точка</string>
+    <string name="from_current_location">От текущего местоположения</string>
+    <string name="from_selected_dot">От выбранной точки</string>
 
 </resources>

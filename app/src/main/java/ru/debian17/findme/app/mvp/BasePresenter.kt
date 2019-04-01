@@ -12,8 +12,7 @@ abstract class BasePresenter<T : BaseView> : MvpPresenter<T>() {
 
     private val errorParser = ErrorParser()
 
-    @Volatile
-    protected lateinit var errorBody: ErrorResponse
+    protected var errorBody: ErrorResponse? = null
 
     protected fun unsubscribeOnDestroy(disposable: Disposable) {
         compositeDisposable.add(disposable)

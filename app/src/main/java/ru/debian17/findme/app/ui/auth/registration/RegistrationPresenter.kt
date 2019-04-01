@@ -5,6 +5,7 @@ import ru.debian17.findme.app.dal.AuthDataSource
 import ru.debian17.findme.app.ext.observeOnUI
 import ru.debian17.findme.app.ext.subscribeOnIO
 import ru.debian17.findme.app.mvp.BasePresenter
+import ru.debian17.findme.data.network.error.ErrorCode
 
 @InjectViewState
 class RegistrationPresenter(private val authDataSource: AuthDataSource) : BasePresenter<RegistrationView>() {
@@ -29,7 +30,7 @@ class RegistrationPresenter(private val authDataSource: AuthDataSource) : BasePr
 
     private fun onRegistrationError(throwable: Throwable) {
         viewState.showMain()
-        viewState.onRegistrationError(errorBody.code)
+        viewState.onRegistrationError(errorBody?.code ?: ErrorCode.UNKNOWN_ERROR)
     }
 
 }

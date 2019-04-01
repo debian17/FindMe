@@ -6,6 +6,8 @@ import io.reactivex.Single
 import ru.debian17.findme.data.model.auth.AuthParams
 import ru.debian17.findme.data.model.auth.AuthResponse
 import ru.debian17.findme.data.model.registration.RegistrationParams
+import ru.debian17.findme.data.model.route.RouteInfo
+import ru.debian17.findme.data.model.route.RouteParam
 
 class WebAPIService(
         private val webAPI: WebAPI,
@@ -33,6 +35,10 @@ class WebAPIService(
 
     fun auth(authParams: AuthParams): Single<AuthResponse> {
         return prepareSingleRequest(webAPI.auth(authParams))
+    }
+
+    fun buildRoute(routeParam: RouteParam): Single<RouteInfo> {
+        return prepareSingleRequest(webAPI.buildRoute(routeParam))
     }
 
 }

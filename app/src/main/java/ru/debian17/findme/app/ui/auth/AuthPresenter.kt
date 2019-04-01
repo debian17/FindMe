@@ -5,7 +5,7 @@ import ru.debian17.findme.app.dal.AuthDataSource
 import ru.debian17.findme.app.ext.observeOnUI
 import ru.debian17.findme.app.ext.subscribeOnIO
 import ru.debian17.findme.app.mvp.BasePresenter
-import java.util.concurrent.TimeUnit
+import ru.debian17.findme.data.network.error.ErrorCode
 
 @InjectViewState
 class AuthPresenter(private val authDataSource: AuthDataSource) : BasePresenter<AuthView>() {
@@ -50,7 +50,7 @@ class AuthPresenter(private val authDataSource: AuthDataSource) : BasePresenter<
 
     private fun onAuthError(throwable: Throwable) {
         viewState.showMain()
-        viewState.onAuthError(errorBody.code)
+        viewState.onAuthError(errorBody?.code ?: ErrorCode.UNKNOWN_ERROR)
     }
 
 }

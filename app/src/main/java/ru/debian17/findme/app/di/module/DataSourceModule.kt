@@ -22,8 +22,8 @@ class DataSourceModule {
     }
 
     @Provides
-    fun provideLocationRepository(context: Context): LocationDataSource {
-        return LocationRepository(context)
+    fun provideLocationRepository(context: Context, webAPIService: WebAPIService): LocationDataSource {
+        return LocationRepository(context, webAPIService)
     }
 
 }

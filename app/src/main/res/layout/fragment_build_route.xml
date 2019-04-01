@@ -6,17 +6,64 @@
     android:layout_height="match_parent"
     tools:context=".app.ui.menu.route.build.BuildRouteFragment">
 
-    <org.osmdroid.views.MapView
-        android:id="@+id/mapView"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/clMain"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:context=".app.ui.menu.route.build.BuildRouteFragment">
 
-    <ImageView
-        android:id="@+id/ivMyLocation"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="@dimen/default_side_margin"
-        app:srcCompat="@drawable/ic_my_location" />
+        <org.osmdroid.views.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:id="@+id/ivMyLocation"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/default_side_margin"
+                app:srcCompat="@drawable/ic_my_location" />
+
+            <ImageView
+                android:id="@+id/ivBuildDirection"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/default_side_margin"
+                app:srcCompat="@drawable/ic_directions" />
+
+            <ImageView
+                android:id="@+id/ivClearRoute"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/default_side_margin"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_location_off" />
+
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        style="@style/LoadingProgressBar" />
 
 </FrameLayout>

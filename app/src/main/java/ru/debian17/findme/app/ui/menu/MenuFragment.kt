@@ -64,7 +64,7 @@ class MenuFragment : BaseFragment(), MenuView {
         }
 
         llLogout.setOnClickListener {
-            presenter.logout()
+            //presenter.logout()
         }
 
     }

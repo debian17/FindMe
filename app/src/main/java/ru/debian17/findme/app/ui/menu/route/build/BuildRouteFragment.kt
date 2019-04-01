@@ -1,6 +1,7 @@
 package ru.debian17.findme.app.ui.menu.route.build
 
 
+import android.graphics.DashPathEffect
 import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,12 +17,18 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.Polyline
 import ru.debian17.findme.R
 import ru.debian17.findme.app.App
+import ru.debian17.findme.app.ext.hide
+import ru.debian17.findme.app.ext.longSnackBar
+import ru.debian17.findme.app.ext.show
 import ru.debian17.findme.app.mvp.BaseFragment
+import ru.debian17.findme.data.mapper.RoutePointMapper
+import ru.debian17.findme.data.model.route.RouteInfo
 
 
-class BuildRouteFragment : BaseFragment(), BuildRouteView {
+class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.BuildRouteListener {
 
     companion object {
         const val TAG = "RouteFragmentTag"
@@ -41,12 +48,71 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView {
         )
     }
 
-    private val startPoint = GeoPoint(47.23660, 39.71257)
+    private val defaultPoint = GeoPoint(47.23660, 39.71257)
     private val defaultZoom = 17.0
 
-    private lateinit var myLocationMarker: Marker
     private lateinit var myCurrentLocation: GeoPoint
-    private lateinit var greenMarker: Marker
+
+    private lateinit var myLocationMarker: Marker
+    private lateinit var startMarker: Marker
+    private lateinit var endMarker: Marker
+    private lateinit var routeLine: Polyline
+    private lateinit var startPointLine: Polyline
+    private lateinit var endPointLine: Polyline
+
+    private var isBuildFromCurLocation = false
+    private var isBuildFromDot = false
+
+    private var isStartPointSelected = false
+    private var isEndPointSelected = false
+
+    private val mapEventsReceiver = object : MapEventsReceiver {
+        override fun longPressHelper(p: GeoPoint?): Boolean {
+            return false
+        }
+
+        override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
+            if (p != null) {
+
+                if (isBuildFromCurLocation) {
+                    isBuildFromCurLocation = false
+                    mapView.overlays.remove(endMarker)
+                    endMarker.position = p
+                    mapView.overlays.add(endMarker)
+                    mapView.invalidate()
+
+                    ivClearRoute.show()
+
+                    if (this@BuildRouteFragment::myCurrentLocation.isInitialized) {
+                        presenter.buildRoute(myCurrentLocation, p)
+                    }
+                }
+
+                if (isBuildFromDot) {
+                    if (isStartPointSelected) {
+                        if (!isEndPointSelected) {
+                            isEndPointSelected = true
+
+                            endMarker.position = p
+                            mapView.overlays.add(endMarker)
+                            mapView.invalidate()
+
+                            ivClearRoute.show()
+
+                            presenter.buildRoute(startMarker.position, endMarker.position)
+                        }
+                    } else {
+                        isStartPointSelected = true
+                        startMarker.position = p
+                        mapView.overlays.add(startMarker)
+                        mapView.invalidate()
+                    }
+                }
+            }
+            return true
+        }
+
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -58,52 +124,59 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mapView.controller.setCenter(startPoint)
+        mapView.controller.setCenter(defaultPoint)
         mapView.controller.setZoom(defaultZoom)
 
         val myLocationIcon = ContextCompat.getDrawable(context!!, R.drawable.ic_location_accent)!!
         myLocationMarker = Marker(mapView)
         myLocationMarker.icon = myLocationIcon
         myLocationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
+        myLocationMarker.title = getString(R.string.current_location)
+
+        val blueIcon = ContextCompat.getDrawable(context!!, R.drawable.ic_location_blue)
+        startMarker = Marker(mapView)
+        startMarker.icon = blueIcon
+        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
+        startMarker.title = getString(R.string.start_point)
 
         val greenIcon = ContextCompat.getDrawable(context!!, R.drawable.ic_location_green)
-        greenMarker = Marker(mapView)
-        greenMarker.icon = greenIcon
+        endMarker = Marker(mapView)
+        endMarker.icon = greenIcon
+        endMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
+        endMarker.title = getString(R.string.end_point)
+
+        routeLine = Polyline(mapView)
+        routeLine.paint.color = ContextCompat.getColor(context!!, R.color.blue)
 
         mapView.apply {
             setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
             zoomController.setVisibility(CustomZoomButtonsController.Visibility.ALWAYS)
             setMultiTouchControls(true)
             controller.setZoom(defaultZoom)
-            controller.setCenter(startPoint)
+            controller.setCenter(defaultPoint)
+
+            val mapEventsOverlay = MapEventsOverlay(mapEventsReceiver)
+            mapView.overlays.add(mapEventsOverlay)
         }
-
-        val mapEventReceiver = object : MapEventsReceiver {
-            override fun longPressHelper(p: GeoPoint?): Boolean {
-                return false
-            }
-
-            override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
-                if (p != null) {
-                    mapView.overlays.remove(greenMarker)
-
-                    greenMarker.position = p
-
-                    mapView.overlays.add(greenMarker)
-                    mapView.invalidate()
-                }
-                return true
-            }
-
-        }
-
-        val mapEventsOverlay = MapEventsOverlay(mapEventReceiver)
-        mapView.overlays.add(mapEventsOverlay)
 
         ivMyLocation.setOnClickListener {
             if (this::myCurrentLocation.isInitialized) {
                 mapView.controller.animateTo(myCurrentLocation)
             }
+        }
+
+        ivBuildDirection.setOnClickListener {
+            if (this::myCurrentLocation.isInitialized) {
+                BuildRouteDialog.newInstance(true)
+                        .show(childFragmentManager, BuildRouteDialog.TAG)
+            } else {
+                BuildRouteDialog.newInstance(false)
+                        .show(childFragmentManager, BuildRouteDialog.TAG)
+            }
+        }
+
+        ivClearRoute.setOnClickListener {
+            clearRoute()
         }
 
     }
@@ -118,6 +191,89 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView {
         mapView.invalidate()
     }
 
+    override fun onFromCurrentLocation() {
+        mapView.overlays.remove(startMarker)
+        mapView.overlays.remove(endMarker)
+        if (this::routeLine.isInitialized) {
+            mapView.overlays.remove(routeLine)
+        }
+        mapView.invalidate()
+
+        ivClearRoute.hide()
+
+        isBuildFromDot = false
+        isStartPointSelected = false
+        isEndPointSelected = false
+
+        isBuildFromCurLocation = true
+    }
+
+    override fun onFromSelectedDot() {
+        mapView.overlays.remove(startMarker)
+        mapView.overlays.remove(endMarker)
+        if (this::routeLine.isInitialized) {
+            mapView.overlays.remove(routeLine)
+        }
+        mapView.invalidate()
+
+        ivClearRoute.hide()
+
+        isBuildFromCurLocation = false
+        isStartPointSelected = false
+        isEndPointSelected = false
+
+        isBuildFromDot = true
+    }
+
+    override fun onBuildRouteError(code: Int) {
+        clearRoute()
+
+        when (code) {
+            else -> {
+                view?.longSnackBar(getString(R.string.default_error_message))
+            }
+        }
+    }
+
+    override fun onBuildRoute(routeInfo: RouteInfo) {
+        val routePoints = ArrayList<GeoPoint>()
+        val routePointMapper = RoutePointMapper()
+        routeInfo.points.forEach { point ->
+            val geoPoint = routePointMapper.map(point)
+            routePoints.add(geoPoint)
+        }
+        routeLine.setPoints(routePoints)
+
+//        val fa = floatArrayOf(25f, 10f)
+//        routeLine.paint.pathEffect = DashPathEffect(fa, 0f)
+
+        routeLine.setOnClickListener { polyline, mapView, eventPos ->
+
+            return@setOnClickListener true
+        }
+
+        mapView.overlays.add(routeLine)
+        mapView.invalidate()
+    }
+
+    private fun clearRoute() {
+        mapView.overlays.remove(startMarker)
+        mapView.overlays.remove(endMarker)
+
+        if (this::routeLine.isInitialized) {
+            mapView.overlays.remove(routeLine)
+        }
+
+        isBuildFromCurLocation = false
+        isBuildFromDot = false
+
+        isStartPointSelected = false
+        isEndPointSelected = false
+
+        mapView.invalidate()
+        ivClearRoute.hide()
+    }
+
     override fun onResume() {
         super.onResume()
         mapView.onResume()
@@ -129,10 +285,13 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView {
     }
 
     override fun showLoading() {
+        pbLoading.show()
+        clMain.hide()
     }
 
     override fun showMain() {
-
+        clMain.show()
+        pbLoading.hide()
     }
 
     override fun showError(errorMessage: String?) {
