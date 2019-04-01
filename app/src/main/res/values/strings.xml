@@ -31,6 +31,8 @@
     <string name="start_point">Начальная точка</string>
     <string name="end_point">Конечная точка</string>
     <string name="from_current_location">От текущего местоположения</string>
-    <string name="from_selected_dot">От выбранной точки</string>
+    <string name="from_selected_dot">Между двумя точками</string>
+    <string name="distance_template_meters">Длина маршрута %.0f м.</string>
+    <string name="distance_template_kilo_meters">Длинна маршрута %.3f км.</string>
 
 </resources>

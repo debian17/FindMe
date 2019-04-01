@@ -7,8 +7,8 @@ import com.google.android.gms.location.LocationServices
 import io.reactivex.Single
 import org.osmdroid.util.GeoPoint
 import ru.debian17.findme.app.dal.LocationDataSource
-import ru.debian17.findme.data.model.route.RouteInfo
 import ru.debian17.findme.data.model.route.RouteParam
+import ru.debian17.findme.data.model.route.RoutePoint
 import ru.debian17.findme.data.model.route.RoutePointParam
 import ru.debian17.findme.data.network.WebAPIService
 
@@ -35,7 +35,7 @@ class LocationRepository(context: Context,
         locationClient.removeLocationUpdates(locationCallback)
     }
 
-    override fun buildRoute(startPoint: GeoPoint, endPoint: GeoPoint): Single<RouteInfo> {
+    override fun buildRoute(startPoint: GeoPoint, endPoint: GeoPoint): Single<List<RoutePoint>> {
         val startPointParam = RoutePointParam(startPoint.longitude, startPoint.latitude)
         val endPointParam = RoutePointParam(endPoint.longitude, endPoint.latitude)
         val routeParams = RouteParam(startPointParam, endPointParam)

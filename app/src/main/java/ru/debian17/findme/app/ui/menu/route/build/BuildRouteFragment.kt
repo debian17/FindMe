@@ -24,8 +24,9 @@ import ru.debian17.findme.app.ext.hide
 import ru.debian17.findme.app.ext.longSnackBar
 import ru.debian17.findme.app.ext.show
 import ru.debian17.findme.app.mvp.BaseFragment
+import ru.debian17.findme.app.util.DistanceUtil
 import ru.debian17.findme.data.mapper.RoutePointMapper
-import ru.debian17.findme.data.model.route.RouteInfo
+import ru.debian17.findme.data.model.route.RoutePoint
 
 
 class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.BuildRouteListener {
@@ -57,8 +58,6 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
     private lateinit var startMarker: Marker
     private lateinit var endMarker: Marker
     private lateinit var routeLine: Polyline
-    private lateinit var startPointLine: Polyline
-    private lateinit var endPointLine: Polyline
 
     private var isBuildFromCurLocation = false
     private var isBuildFromDot = false
@@ -233,19 +232,13 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
                 view?.longSnackBar(getString(R.string.default_error_message))
             }
         }
+
     }
 
-    override fun onBuildRoute(routeInfo: RouteInfo) {
-        val routePoints = ArrayList<GeoPoint>()
-        val routePointMapper = RoutePointMapper()
-        routeInfo.points.forEach { point ->
-            val geoPoint = routePointMapper.map(point)
-            routePoints.add(geoPoint)
-        }
-        routeLine.setPoints(routePoints)
-
-//        val fa = floatArrayOf(25f, 10f)
-//        routeLine.paint.pathEffect = DashPathEffect(fa, 0f)
+    override fun onBuildRoute(routePoints: List<RoutePoint>) {
+        val routeMapper = RoutePointMapper()
+        val geoPoints = routeMapper.mapAll(routePoints)
+        routeLine.setPoints(geoPoints)
 
         routeLine.setOnClickListener { polyline, mapView, eventPos ->
 
@@ -254,6 +247,15 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
 
         mapView.overlays.add(routeLine)
         mapView.invalidate()
+
+        llRouteInfo.show()
+        val distanceTemplate: String = if (routeLine.distance >= 1000) {
+            getString(R.string.distance_template_kilo_meters)
+        } else {
+            getString(R.string.distance_template_meters)
+        }
+        val distance = DistanceUtil.roundDistance(routeLine.distance, 3)
+        tvDistance.text = String.format(distanceTemplate, distance)
     }
 
     private fun clearRoute() {

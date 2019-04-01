@@ -5,7 +5,7 @@ import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import ru.debian17.findme.app.mvp.BaseView
-import ru.debian17.findme.data.model.route.RouteInfo
+import ru.debian17.findme.data.model.route.RoutePoint
 
 interface BuildRouteView : BaseView {
 
@@ -16,6 +16,6 @@ interface BuildRouteView : BaseView {
     fun onBuildRouteError(code: Int)
 
     @StateStrategyType(AddToEndSingleStrategy::class)
-    fun onBuildRoute(routeInfo: RouteInfo)
+    fun onBuildRoute(routePoints: List<RoutePoint>)
 
 }

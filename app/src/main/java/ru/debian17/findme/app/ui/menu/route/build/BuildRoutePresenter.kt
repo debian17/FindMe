@@ -8,7 +8,7 @@ import ru.debian17.findme.app.dal.LocationDataSource
 import ru.debian17.findme.app.ext.observeOnUI
 import ru.debian17.findme.app.ext.subscribeOnIO
 import ru.debian17.findme.app.mvp.BasePresenter
-import ru.debian17.findme.data.model.route.RouteInfo
+import ru.debian17.findme.data.model.route.RoutePoint
 import ru.debian17.findme.data.network.error.ErrorCode
 
 @InjectViewState
@@ -42,9 +42,9 @@ class BuildRoutePresenter(private val locationDataSource: LocationDataSource) : 
                 .subscribe(this::onRouteSuccess, this::onRouteError))
     }
 
-    private fun onRouteSuccess(routeInfo: RouteInfo) {
+    private fun onRouteSuccess(routePoints: List<RoutePoint>) {
         viewState.showMain()
-        viewState.onBuildRoute(routeInfo)
+        viewState.onBuildRoute(routePoints)
     }
 
     private fun onRouteError(throwable: Throwable) {
