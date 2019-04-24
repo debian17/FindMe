@@ -2,11 +2,10 @@ package ru.debian17.findme.data.network
 
 import io.reactivex.Completable
 import io.reactivex.Single
-import retrofit2.http.Body
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import retrofit2.http.*
 import ru.debian17.findme.data.model.auth.AuthParams
 import ru.debian17.findme.data.model.auth.AuthResponse
+import ru.debian17.findme.data.model.edge.EdgeInfo
 import ru.debian17.findme.data.model.registration.RegistrationParams
 import ru.debian17.findme.data.model.route.RouteParam
 import ru.debian17.findme.data.model.route.RoutePoint
@@ -22,5 +21,9 @@ interface WebAPI {
     @Headers(RequestTokenInterceptor.NEED_AUTH_TOKEN)
     @POST("calculate_route")
     fun buildRoute(@Body routeParam: RouteParam): Single<List<RoutePoint>>
+
+    @Headers(RequestTokenInterceptor.NEED_AUTH_TOKEN)
+    @GET("ways/{wayId}/attributes")
+    fun getAttributesOfEdge(@Path("wayId") edgeId: Int): Single<EdgeInfo>
 
 }

@@ -18,18 +18,12 @@ class AccessTokenManager(context: Context) {
     }
 
     fun getAccessToken(): String {
-        val accessToken = sharedPref.getString(
-                ACCESS_TOKEN_KEY,
-                DEFAULT_ACCESS_TOKEN
-        )
+        val accessToken = sharedPref.getString(ACCESS_TOKEN_KEY, DEFAULT_ACCESS_TOKEN)
         return accessToken ?: DEFAULT_ACCESS_TOKEN
     }
 
     fun isUserLogin(): Boolean {
-        val accessToken = sharedPref.getString(
-                ACCESS_TOKEN_KEY,
-                DEFAULT_ACCESS_TOKEN
-        )
+        val accessToken = sharedPref.getString(ACCESS_TOKEN_KEY, DEFAULT_ACCESS_TOKEN)
         return !(accessToken == null || accessToken == DEFAULT_ACCESS_TOKEN)
     }
 

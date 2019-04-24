@@ -1,0 +1,8 @@
+0
+category1
+true
+false
+1
+category2
+true
+true

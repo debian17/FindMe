@@ -34,5 +34,9 @@
     <string name="from_selected_dot">Между двумя точками</string>
     <string name="distance_template_meters">Длина маршрута %.0f м.</string>
     <string name="distance_template_kilo_meters">Длинна маршрута %.3f км.</string>
+    <string name="point_attributes">Точечные атрибуты</string>
+    <string name="long_attributes">Протяженные атрибуты</string>
+    <string name="categories_file_name">categories.txt</string>
+
 
 </resources>

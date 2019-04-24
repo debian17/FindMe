@@ -5,13 +5,14 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import ru.debian17.findme.data.model.auth.AuthParams
 import ru.debian17.findme.data.model.auth.AuthResponse
+import ru.debian17.findme.data.model.edge.EdgeInfo
 import ru.debian17.findme.data.model.registration.RegistrationParams
 import ru.debian17.findme.data.model.route.RouteParam
 import ru.debian17.findme.data.model.route.RoutePoint
 
 class WebAPIService(
-        private val webAPI: WebAPI,
-        private val connectivityManager: ConnectivityManager
+    private val webAPI: WebAPI,
+    private val connectivityManager: ConnectivityManager
 ) {
 
     private fun checkNetworkState() {
@@ -39,6 +40,10 @@ class WebAPIService(
 
     fun buildRoute(routeParam: RouteParam): Single<List<RoutePoint>> {
         return prepareSingleRequest(webAPI.buildRoute(routeParam))
+    }
+
+    fun getAttributesOfEdge(edgeId: Int): Single<EdgeInfo> {
+        return prepareSingleRequest(webAPI.getAttributesOfEdge(edgeId))
     }
 
 }

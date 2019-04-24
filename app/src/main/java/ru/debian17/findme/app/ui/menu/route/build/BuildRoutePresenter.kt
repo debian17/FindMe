@@ -4,15 +4,20 @@ import com.arellomobile.mvp.InjectViewState
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import org.osmdroid.util.GeoPoint
+import ru.debian17.findme.app.dal.AttributesDataSource
 import ru.debian17.findme.app.dal.LocationDataSource
 import ru.debian17.findme.app.ext.observeOnUI
 import ru.debian17.findme.app.ext.subscribeOnIO
 import ru.debian17.findme.app.mvp.BasePresenter
+import ru.debian17.findme.data.model.edge.EdgeInfo
 import ru.debian17.findme.data.model.route.RoutePoint
 import ru.debian17.findme.data.network.error.ErrorCode
 
 @InjectViewState
-class BuildRoutePresenter(private val locationDataSource: LocationDataSource) : BasePresenter<BuildRouteView>() {
+class BuildRoutePresenter(
+    private val locationDataSource: LocationDataSource,
+    private val attributesDataSource: AttributesDataSource
+) : BasePresenter<BuildRouteView>() {
 
     private val updateCurrentLocationCallback = object : LocationCallback() {
         override fun onLocationResult(p0: LocationResult?) {
@@ -34,12 +39,12 @@ class BuildRoutePresenter(private val locationDataSource: LocationDataSource) : 
     fun buildRoute(startPoint: GeoPoint, endPoint: GeoPoint) {
         viewState.showLoading()
         unsubscribeOnDestroy(locationDataSource.buildRoute(startPoint, endPoint)
-                .subscribeOnIO()
-                .doOnError {
-                    errorBody = getError(it)
-                }
-                .observeOnUI()
-                .subscribe(this::onRouteSuccess, this::onRouteError))
+            .subscribeOnIO()
+            .doOnError {
+                errorBody = getError(it)
+            }
+            .observeOnUI()
+            .subscribe(this::onRouteSuccess, this::onRouteError))
     }
 
     private fun onRouteSuccess(routePoints: List<RoutePoint>) {
@@ -50,6 +55,29 @@ class BuildRoutePresenter(private val locationDataSource: LocationDataSource) : 
     private fun onRouteError(throwable: Throwable) {
         viewState.showMain()
         viewState.onBuildRouteError(errorBody?.code ?: ErrorCode.UNKNOWN_ERROR)
+    }
+
+    fun getAttributesOfEdge(edgeId: Int) {
+        viewState.showLoading()
+        unsubscribeOnDestroy(
+            attributesDataSource.getAttributesOfEdge(edgeId)
+                .subscribeOnIO()
+                .doOnError {
+                    errorBody = getError(it)
+                }
+                .observeOnUI()
+                .subscribe(this::onAttributesOfEdgeSuccess, this::onAttributesOfEdgeError)
+        )
+    }
+
+    private fun onAttributesOfEdgeSuccess(edgeInfo: EdgeInfo) {
+        viewState.showMain()
+        viewState.onEdgeClick(edgeInfo)
+    }
+
+    private fun onAttributesOfEdgeError(throwable: Throwable) {
+        viewState.showMain()
+        viewState.onAttributesOfEdgeError(errorBody?.code ?: ErrorCode.UNKNOWN_ERROR)
     }
 
 }

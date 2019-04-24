@@ -1,7 +1,7 @@
 package ru.debian17.findme.app.ui.menu.route.build
 
 
-import android.graphics.DashPathEffect
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,10 +13,12 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_build_route.*
 import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.Distance
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.Polygon
 import org.osmdroid.views.overlay.Polyline
 import ru.debian17.findme.R
 import ru.debian17.findme.app.App
@@ -25,7 +27,9 @@ import ru.debian17.findme.app.ext.longSnackBar
 import ru.debian17.findme.app.ext.show
 import ru.debian17.findme.app.mvp.BaseFragment
 import ru.debian17.findme.app.util.DistanceUtil
-import ru.debian17.findme.data.mapper.RoutePointMapper
+import ru.debian17.findme.data.model.attribute.LongAttribute
+import ru.debian17.findme.data.model.attribute.PointAttribute
+import ru.debian17.findme.data.model.edge.EdgeInfo
 import ru.debian17.findme.data.model.route.RoutePoint
 
 
@@ -43,9 +47,10 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
 
     @ProvidePresenter
     fun providePresenter(): BuildRoutePresenter {
+        val dataSourceComponent = (activity!!.application as App).getDataSourceComponent()
         return BuildRoutePresenter(
-                (activity!!.application as App).getDataSourceComponent()
-                        .provideLocationRepository()
+            dataSourceComponent.provideLocationRepository(),
+            dataSourceComponent.provideAttributesRepository()
         )
     }
 
@@ -57,7 +62,10 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
     private lateinit var myLocationMarker: Marker
     private lateinit var startMarker: Marker
     private lateinit var endMarker: Marker
-    private lateinit var routeLine: Polyline
+
+    private val routePoints = ArrayList<RoutePoint>()
+    private val routeLines = ArrayList<Polyline>()
+    private val pointAttributes = ArrayList<Polygon>()
 
     private var isBuildFromCurLocation = false
     private var isBuildFromDot = false
@@ -107,15 +115,52 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
                         mapView.invalidate()
                     }
                 }
+
             }
             return true
         }
 
     }
 
+    private val routeLineOnClickListener = Polyline.OnClickListener { polyline, mapView, eventPos ->
+        if (routePoints.isNotEmpty()) {
+
+            val edgeId = routePoints.minBy {
+                Distance.getSquaredDistanceToLine(
+                    eventPos.longitude,
+                    eventPos.latitude,
+                    it.startLong,
+                    it.startLat,
+                    it.endLong,
+                    it.endLat
+                )
+            }?.edgeId
+
+            if (edgeId != null) {
+
+                presenter.getAttributesOfEdge(edgeId)
+
+//                    val circle = Polygon(mapView)
+//                    circle.apply {
+//                        points = Polygon.pointsAsCircle(eventPos, 50.0)
+//                        fillColor = 0x12121212
+//                        strokeColor = Color.RED
+//                        strokeWidth = 2f
+//                        title = null
+//                        setOnClickListener { _, _, _ -> false }
+//                        infoWindow = null
+//                    }
+//
+//                    mapView.overlays.add(circle)
+//                    mapView.invalidate()
+            }
+        }
+        return@OnClickListener true
+    }
+
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_build_route, container, false)
     }
@@ -144,9 +189,6 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
         endMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
         endMarker.title = getString(R.string.end_point)
 
-        routeLine = Polyline(mapView)
-        routeLine.paint.color = ContextCompat.getColor(context!!, R.color.blue)
-
         mapView.apply {
             setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
             zoomController.setVisibility(CustomZoomButtonsController.Visibility.ALWAYS)
@@ -167,10 +209,10 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
         ivBuildDirection.setOnClickListener {
             if (this::myCurrentLocation.isInitialized) {
                 BuildRouteDialog.newInstance(true)
-                        .show(childFragmentManager, BuildRouteDialog.TAG)
+                    .show(childFragmentManager, BuildRouteDialog.TAG)
             } else {
                 BuildRouteDialog.newInstance(false)
-                        .show(childFragmentManager, BuildRouteDialog.TAG)
+                    .show(childFragmentManager, BuildRouteDialog.TAG)
             }
         }
 
@@ -193,8 +235,8 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
     override fun onFromCurrentLocation() {
         mapView.overlays.remove(startMarker)
         mapView.overlays.remove(endMarker)
-        if (this::routeLine.isInitialized) {
-            mapView.overlays.remove(routeLine)
+        routeLines.forEach {
+            mapView.overlays.remove(it)
         }
         mapView.invalidate()
 
@@ -210,8 +252,8 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
     override fun onFromSelectedDot() {
         mapView.overlays.remove(startMarker)
         mapView.overlays.remove(endMarker)
-        if (this::routeLine.isInitialized) {
-            mapView.overlays.remove(routeLine)
+        routeLines.forEach {
+            mapView.overlays.remove(it)
         }
         mapView.invalidate()
 
@@ -224,47 +266,67 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
         isBuildFromDot = true
     }
 
-    override fun onBuildRouteError(code: Int) {
-        clearRoute()
-
-        when (code) {
-            else -> {
-                view?.longSnackBar(getString(R.string.default_error_message))
-            }
-        }
-
-    }
-
     override fun onBuildRoute(routePoints: List<RoutePoint>) {
-        val routeMapper = RoutePointMapper()
-        val geoPoints = routeMapper.mapAll(routePoints)
-        routeLine.setPoints(geoPoints)
+        this.routePoints.addAll(routePoints)
+        var i = 0
+        val size = routePoints.size
 
-        routeLine.setOnClickListener { polyline, mapView, eventPos ->
+        var distance = 0.0
 
-            return@setOnClickListener true
+        while (i < size) {
+            val line = Polyline(mapView)
+            line.title = null
+            line.infoWindow = null
+            line.setOnClickListener(routeLineOnClickListener)
+
+            val item = routePoints[i]
+            val start = GeoPoint(item.startLat, item.startLong)
+            val end = GeoPoint(item.endLat, item.endLong)
+
+            when (item.attributes.size) {
+                0 -> line.paint.color = Color.BLUE
+                1 -> line.paint.color = Color.YELLOW
+                else -> line.paint.color = Color.RED
+            }
+
+            line.addPoint(start)
+            line.addPoint(end)
+
+            routeLines.add(line)
+
+            distance += line.distance
+
+            mapView.overlays.add(line)
+
+            i++
         }
-
-        mapView.overlays.add(routeLine)
         mapView.invalidate()
 
         llRouteInfo.show()
-        val distanceTemplate: String = if (routeLine.distance >= 1000) {
+        val distanceTemplate: String = if (distance >= 1000) {
             getString(R.string.distance_template_kilo_meters)
         } else {
             getString(R.string.distance_template_meters)
         }
-        val distance = DistanceUtil.roundDistance(routeLine.distance, 3)
-        tvDistance.text = String.format(distanceTemplate, distance)
+        val distanceResult = DistanceUtil.roundDistance(distance, 3)
+        tvDistance.text = String.format(distanceTemplate, distanceResult)
+        llRouteInfo.show()
     }
 
     private fun clearRoute() {
         mapView.overlays.remove(startMarker)
         mapView.overlays.remove(endMarker)
-
-        if (this::routeLine.isInitialized) {
-            mapView.overlays.remove(routeLine)
+        routeLines.forEach {
+            mapView.overlays.remove(it)
         }
+        pointAttributes.forEach {
+            mapView.overlays.remove(it)
+        }
+
+        llRouteInfo.hide()
+
+        routePoints.clear()
+        pointAttributes.clear()
 
         isBuildFromCurLocation = false
         isBuildFromDot = false
@@ -274,6 +336,28 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
 
         mapView.invalidate()
         ivClearRoute.hide()
+    }
+
+    override fun onEdgeClick(edgeInfo: EdgeInfo) {
+
+        val pointAttributes = ArrayList<PointAttribute>(edgeInfo.pointAttributes)
+        val longAttributes = ArrayList<LongAttribute>(edgeInfo.longAttributes)
+        EdgeAttributesDialog.newInstance(pointAttributes, longAttributes, routePoints)
+            .show(childFragmentManager, EdgeAttributesDialog.TAG)
+    }
+
+    override fun onBuildRouteError(code: Int) {
+        clearRoute()
+        when (code) {
+            else -> {
+                view?.longSnackBar(getString(R.string.default_error_message))
+            }
+        }
+
+    }
+
+    override fun onAttributesOfEdgeError(cde: Int) {
+
     }
 
     override fun onResume() {
