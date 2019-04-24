@@ -37,6 +37,12 @@
     <string name="point_attributes">Точечные атрибуты</string>
     <string name="long_attributes">Протяженные атрибуты</string>
     <string name="categories_file_name">categories.txt</string>
+    <string name="category">Категория</string>
+    <string name="comment">Комментарий</string>
+    <string name="radius">Радиус</string>
+    <string name="latitude">Широта</string>
+    <string name="longitude">Долгота</string>
+    <string name="long_attr">Длинна</string>
 
 
 </resources>
