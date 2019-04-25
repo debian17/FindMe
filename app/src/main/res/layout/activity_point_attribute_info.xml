@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".app.ui.menu.attribute.info.AttributeInfoActivity">
+    android:orientation="vertical">
 
     <org.osmdroid.views.MapView
         android:id="@+id/mapView"
@@ -42,7 +41,7 @@
                 android:layout_marginEnd="@dimen/default_side_margin" />
 
             <TextView
-                android:id="@+id/tvLong"
+                android:id="@+id/tvRadius"
                 style="@style/PrimaryText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

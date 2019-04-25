@@ -115,7 +115,7 @@ class PointAttributeInfoActivity : BaseActivity() {
 
         tvCategory.text = "${getString(R.string.category)}: ${category.name}"
         tvComment.text = "${getString(R.string.comment)}: ${pointAttribute!!.comment}"
-        tvLong.text = "${getString(R.string.radius)}: ${pointAttribute!!.radius} м."
+        tvRadius.text = "${getString(R.string.radius)}: ${pointAttribute!!.radius} м."
 
         mapView.apply {
             overlays.add(pointPolygon)

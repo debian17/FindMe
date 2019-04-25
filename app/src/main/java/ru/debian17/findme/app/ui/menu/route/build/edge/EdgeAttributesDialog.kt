@@ -9,6 +9,7 @@ import kotlinx.android.synthetic.main.edge_attributes_bottom_dialog.*
 import ru.debian17.findme.R
 import ru.debian17.findme.app.androidx.MvpBottomSheetDialogFragment
 import ru.debian17.findme.app.base.Header
+import ru.debian17.findme.app.ui.menu.attribute.info.lon.LongAttributeInfoActivity
 import ru.debian17.findme.app.ui.menu.attribute.info.point.PointAttributeInfoActivity
 import ru.debian17.findme.data.model.attribute.LongAttribute
 import ru.debian17.findme.data.model.attribute.PointAttribute
@@ -17,7 +18,7 @@ import ru.debian17.findme.data.model.route.RoutePoint
 
 
 class EdgeAttributesDialog : MvpBottomSheetDialogFragment(),
-        EdgeAttributesAdapter.EdgeAttributesListener {
+    EdgeAttributesAdapter.EdgeAttributesListener {
 
     companion object {
         private const val POINT_ATTRIBUTES_KEY = "pointAttributesKey"
@@ -26,10 +27,10 @@ class EdgeAttributesDialog : MvpBottomSheetDialogFragment(),
         private const val ROUTE_POINTS_KEY = "routePointsKey"
         const val TAG = "AttributesDialogTag"
         fun newInstance(
-                pointAttributes: ArrayList<PointAttribute>,
-                longAttributes: ArrayList<LongAttribute>,
-                categories: ArrayList<Category>,
-                routePoints: ArrayList<RoutePoint>
+            pointAttributes: ArrayList<PointAttribute>,
+            longAttributes: ArrayList<LongAttribute>,
+            categories: ArrayList<Category>,
+            routePoints: ArrayList<RoutePoint>
         ): EdgeAttributesDialog {
             return EdgeAttributesDialog().apply {
                 arguments = Bundle().apply {
@@ -81,16 +82,27 @@ class EdgeAttributesDialog : MvpBottomSheetDialogFragment(),
     override fun onPointAttributeClick(pointAttribute: PointAttribute) {
         val category = categories.find { it.id == pointAttribute.categoryId }
         if (category != null) {
-            val intent = PointAttributeInfoActivity.getStartIntent(context!!,
-                    pointAttribute,
-                    category,
-                    routePoints)
+            val intent = PointAttributeInfoActivity.getStartIntent(
+                context!!,
+                pointAttribute,
+                category,
+                routePoints
+            )
             startActivity(intent)
         }
     }
 
     override fun onLongAttributeClick(longAttribute: LongAttribute) {
-
+        val category = categories.find { it.id == longAttribute.categoryId }
+        if (category != null) {
+            val intent = LongAttributeInfoActivity.getStartIntent(
+                context!!,
+                longAttribute,
+                category,
+                routePoints
+            )
+            startActivity(intent)
+        }
     }
 
 }
