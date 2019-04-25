@@ -5,6 +5,7 @@ import io.reactivex.Single
 import retrofit2.http.*
 import ru.debian17.findme.data.model.auth.AuthParams
 import ru.debian17.findme.data.model.auth.AuthResponse
+import ru.debian17.findme.data.model.category.Category
 import ru.debian17.findme.data.model.edge.EdgeInfo
 import ru.debian17.findme.data.model.registration.RegistrationParams
 import ru.debian17.findme.data.model.route.RouteParam
@@ -25,5 +26,9 @@ interface WebAPI {
     @Headers(RequestTokenInterceptor.NEED_AUTH_TOKEN)
     @GET("ways/{wayId}/attributes")
     fun getAttributesOfEdge(@Path("wayId") edgeId: Int): Single<EdgeInfo>
+
+    @Headers(RequestTokenInterceptor.NEED_AUTH_TOKEN)
+    @GET("attributes/categories")
+    fun getCategories(): Single<List<Category>>
 
 }

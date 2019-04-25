@@ -5,6 +5,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import ru.debian17.findme.data.model.auth.AuthParams
 import ru.debian17.findme.data.model.auth.AuthResponse
+import ru.debian17.findme.data.model.category.Category
 import ru.debian17.findme.data.model.edge.EdgeInfo
 import ru.debian17.findme.data.model.registration.RegistrationParams
 import ru.debian17.findme.data.model.route.RouteParam
@@ -44,6 +45,10 @@ class WebAPIService(
 
     fun getAttributesOfEdge(edgeId: Int): Single<EdgeInfo> {
         return prepareSingleRequest(webAPI.getAttributesOfEdge(edgeId))
+    }
+
+    fun getCategories(): Single<List<Category>>{
+        return prepareSingleRequest(webAPI.getCategories())
     }
 
 }

@@ -57,20 +57,3 @@ fun <T> Single<T>.observeOnUI(): Single<T> = observeOn(AndroidSchedulers.mainThr
 fun Completable.subscribeOnIO(): Completable = subscribeOn(Schedulers.io())
 
 fun Completable.observeOnUI(): Completable = observeOn(AndroidSchedulers.mainThread())
-
-fun Context.getCategories(): List<Category> {
-    val inputStream = assets.open(getString(R.string.categories_file_name))
-    val bf = BufferedReader(InputStreamReader(inputStream))
-    val categories = ArrayList<Category>()
-    var line = bf.readLine()
-    while (line != null) {
-        val id = line.toInt()
-        val categoryName = bf.readLine()!!
-        val isPoint = bf.readLine()!!.toBoolean()
-        val isLong = bf.readLine()!!.toBoolean()
-        val category = Category(id, categoryName, isPoint, isLong)
-        categories.add(category)
-        line = bf.readLine()
-    }
-    return categories
-}

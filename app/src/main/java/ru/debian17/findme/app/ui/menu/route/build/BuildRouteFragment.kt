@@ -26,9 +26,11 @@ import ru.debian17.findme.app.ext.hide
 import ru.debian17.findme.app.ext.longSnackBar
 import ru.debian17.findme.app.ext.show
 import ru.debian17.findme.app.mvp.BaseFragment
+import ru.debian17.findme.app.ui.menu.route.build.edge.EdgeAttributesDialog
 import ru.debian17.findme.app.util.DistanceUtil
 import ru.debian17.findme.data.model.attribute.LongAttribute
 import ru.debian17.findme.data.model.attribute.PointAttribute
+import ru.debian17.findme.data.model.category.Category
 import ru.debian17.findme.data.model.edge.EdgeInfo
 import ru.debian17.findme.data.model.route.RoutePoint
 
@@ -50,12 +52,10 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
         val dataSourceComponent = (activity!!.application as App).getDataSourceComponent()
         return BuildRoutePresenter(
             dataSourceComponent.provideLocationRepository(),
-            dataSourceComponent.provideAttributesRepository()
+            dataSourceComponent.provideAttributesRepository(),
+            dataSourceComponent.provideCategoriesRepository()
         )
     }
-
-    private val defaultPoint = GeoPoint(47.23660, 39.71257)
-    private val defaultZoom = 17.0
 
     private lateinit var myCurrentLocation: GeoPoint
 
@@ -125,7 +125,7 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
     private val routeLineOnClickListener = Polyline.OnClickListener { polyline, mapView, eventPos ->
         if (routePoints.isNotEmpty()) {
 
-            val edgeId = routePoints.minBy {
+            val selectedEdge = routePoints.minBy {
                 Distance.getSquaredDistanceToLine(
                     eventPos.longitude,
                     eventPos.latitude,
@@ -134,26 +134,12 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
                     it.endLong,
                     it.endLat
                 )
-            }?.edgeId
-
-            if (edgeId != null) {
-
-                presenter.getAttributesOfEdge(edgeId)
-
-//                    val circle = Polygon(mapView)
-//                    circle.apply {
-//                        points = Polygon.pointsAsCircle(eventPos, 50.0)
-//                        fillColor = 0x12121212
-//                        strokeColor = Color.RED
-//                        strokeWidth = 2f
-//                        title = null
-//                        setOnClickListener { _, _, _ -> false }
-//                        infoWindow = null
-//                    }
-//
-//                    mapView.overlays.add(circle)
-//                    mapView.invalidate()
             }
+
+            if (selectedEdge != null && selectedEdge.attributes.isNotEmpty()) {
+                presenter.getAttributesOfEdge(selectedEdge.edgeId)
+            }
+
         }
         return@OnClickListener true
     }
@@ -338,11 +324,10 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
         ivClearRoute.hide()
     }
 
-    override fun onEdgeClick(edgeInfo: EdgeInfo) {
-
+    override fun onEdgeInfoLoaded(edgeInfo: EdgeInfo, categories: List<Category>) {
         val pointAttributes = ArrayList<PointAttribute>(edgeInfo.pointAttributes)
         val longAttributes = ArrayList<LongAttribute>(edgeInfo.longAttributes)
-        EdgeAttributesDialog.newInstance(pointAttributes, longAttributes, routePoints)
+        EdgeAttributesDialog.newInstance(pointAttributes, longAttributes, ArrayList(categories), routePoints)
             .show(childFragmentManager, EdgeAttributesDialog.TAG)
     }
 
@@ -356,7 +341,7 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
 
     }
 
-    override fun onAttributesOfEdgeError(cde: Int) {
+    override fun onAttributesOfEdgeError(code: Int) {
 
     }
 

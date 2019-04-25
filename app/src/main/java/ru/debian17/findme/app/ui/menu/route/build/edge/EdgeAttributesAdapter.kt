@@ -1,4 +1,4 @@
-package ru.debian17.findme.app.ui.menu.route.build
+package ru.debian17.findme.app.ui.menu.route.build.edge
 
 import android.view.LayoutInflater
 import android.view.View
@@ -29,9 +29,9 @@ class EdgeAttributesAdapter(
         fun onLongAttributeClick(longAttribute: LongAttribute)
     }
 
+
     override fun getItemViewType(position: Int): Int {
-        val item = items[position]
-        return when (item) {
+        return when (val item = items[position]) {
             is Header -> VIEW_TYPE_HEADER
             is PointAttribute -> VIEW_TYPE_POINT
             is LongAttribute -> VIEW_TYPE_LONG

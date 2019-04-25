@@ -43,6 +43,11 @@
     <string name="latitude">Широта</string>
     <string name="longitude">Долгота</string>
     <string name="long_attr">Длинна</string>
+    <string name="point_attribute">Точечный атрибут</string>
+    <string name="long_attribute">Протяженный атрибут</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

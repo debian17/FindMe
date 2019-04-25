@@ -5,6 +5,7 @@ import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import ru.debian17.findme.app.mvp.BaseView
+import ru.debian17.findme.data.model.category.Category
 import ru.debian17.findme.data.model.edge.EdgeInfo
 import ru.debian17.findme.data.model.route.RoutePoint
 
@@ -20,9 +21,9 @@ interface BuildRouteView : BaseView {
     fun onBuildRoute(routePoints: List<RoutePoint>)
 
     @StateStrategyType(OneExecutionStateStrategy::class)
-    fun onAttributesOfEdgeError(cde: Int)
+    fun onAttributesOfEdgeError(code: Int)
 
     @StateStrategyType(OneExecutionStateStrategy::class)
-    fun onEdgeClick(edgeInfo: EdgeInfo)
+    fun onEdgeInfoLoaded(edgeInfo: EdgeInfo, categories: List<Category>)
 
 }
