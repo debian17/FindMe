@@ -3,6 +3,7 @@ package ru.debian17.findme.data.network
 import io.reactivex.Completable
 import io.reactivex.Single
 import retrofit2.http.*
+import ru.debian17.findme.data.model.attribute.PointAttributeParams
 import ru.debian17.findme.data.model.auth.AuthParams
 import ru.debian17.findme.data.model.auth.AuthResponse
 import ru.debian17.findme.data.model.category.Category
@@ -30,5 +31,9 @@ interface WebAPI {
     @Headers(RequestTokenInterceptor.NEED_AUTH_TOKEN)
     @GET("attributes/categories")
     fun getCategories(): Single<List<Category>>
+
+    @Headers(RequestTokenInterceptor.NEED_AUTH_TOKEN)
+    @POST("/api/point_attributes")
+    fun addPointAttribute(@Body pointAttributeParams: PointAttributeParams): Completable
 
 }

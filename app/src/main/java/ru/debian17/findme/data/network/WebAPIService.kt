@@ -3,6 +3,7 @@ package ru.debian17.findme.data.network
 import android.net.ConnectivityManager
 import io.reactivex.Completable
 import io.reactivex.Single
+import ru.debian17.findme.data.model.attribute.PointAttributeParams
 import ru.debian17.findme.data.model.auth.AuthParams
 import ru.debian17.findme.data.model.auth.AuthResponse
 import ru.debian17.findme.data.model.category.Category
@@ -12,8 +13,8 @@ import ru.debian17.findme.data.model.route.RouteParam
 import ru.debian17.findme.data.model.route.RoutePoint
 
 class WebAPIService(
-    private val webAPI: WebAPI,
-    private val connectivityManager: ConnectivityManager
+        private val webAPI: WebAPI,
+        private val connectivityManager: ConnectivityManager
 ) {
 
     private fun checkNetworkState() {
@@ -47,8 +48,12 @@ class WebAPIService(
         return prepareSingleRequest(webAPI.getAttributesOfEdge(edgeId))
     }
 
-    fun getCategories(): Single<List<Category>>{
+    fun getCategories(): Single<List<Category>> {
         return prepareSingleRequest(webAPI.getCategories())
+    }
+
+    fun addPointAttribute(pointAttributeParams: PointAttributeParams): Completable {
+        return prepareCompletableRequest(webAPI.addPointAttribute(pointAttributeParams))
     }
 
 }

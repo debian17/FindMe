@@ -5,16 +5,16 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 class Category(
-    @SerializedName("id") val id: Int,
-    @SerializedName("name") val name: String,
-    @SerializedName("is_point") val isPoint: Boolean,
-    @SerializedName("is_long") val isLong: Boolean
+        @SerializedName("id") val id: Int,
+        @SerializedName("name") val name: String,
+        @SerializedName("is_point") val isPoint: Boolean,
+        @SerializedName("is_long") val isLong: Boolean
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readInt(),
-        parcel.readString()!!,
-        parcel.readByte() != 0.toByte(),
-        parcel.readByte() != 0.toByte()
+            parcel.readInt(),
+            parcel.readString()!!,
+            parcel.readByte() != 0.toByte(),
+            parcel.readByte() != 0.toByte()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -36,5 +36,9 @@ class Category(
         override fun newArray(size: Int): Array<Category?> {
             return arrayOfNulls(size)
         }
+    }
+
+    override fun toString(): String {
+        return name
     }
 }

@@ -46,6 +46,10 @@
     <string name="point_attribute">Точечный атрибут</string>
     <string name="long_attribute">Протяженный атрибут</string>
     <string name="about_time_minutes">Приблизительное время %.2f мин.</string>
+    <string name="write_comment_hint">Напишите комментарий</string>
+    <string name="selected_dot_on_map">Выберите точку на карте</string>
+    <string name="write_comment">Напишите комментарий</string>
+    <string name="attribute_added">Атрибут успешно добавлен</string>
 
 
 </resources>
