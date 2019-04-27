@@ -9,6 +9,8 @@ import ru.debian17.findme.app.ui.menu.attribute.list.AttributesFragment
 import ru.debian17.findme.app.ui.menu.route.add.AddRouteFragment
 import ru.debian17.findme.app.ui.menu.route.build.BuildRouteFragment
 import ru.debian17.findme.app.ui.auth.registration.RegistrationFragment
+import ru.debian17.findme.app.ui.menu.attribute.add.lon.AddLongAttributeFragment
+import ru.debian17.findme.app.ui.menu.attribute.add.lon.AddLongAttributePresenter
 import ru.debian17.findme.app.ui.menu.attribute.add.point.AddPointAttributeFragment
 import java.lang.IllegalArgumentException
 
@@ -25,6 +27,7 @@ class MainNavigator(private val fragmentManager: FragmentManager) {
                 AddRouteFragment.TAG -> AddRouteFragment.newInstance()
                 AttributesFragment.TAG -> AttributesFragment.newInstance()
                 AddPointAttributeFragment.TAG -> AddPointAttributeFragment.newInstance()
+                AddLongAttributeFragment.TAG -> AddLongAttributeFragment.newInstance()
                 else -> throw IllegalArgumentException("Unknown screenTag=$screenTag")
             }
         }
@@ -34,18 +37,18 @@ class MainNavigator(private val fragmentManager: FragmentManager) {
     fun replaceScreen(screenTag: String) {
         val fragment = getFragment(screenTag)
         fragmentManager.beginTransaction()
-                .setCustomAnimations(R.animator.slide_in_left, R.animator.slide_out_right)
-                .replace(R.id.flMainContainer, fragment, screenTag)
-                .commit()
+            .setCustomAnimations(R.animator.slide_in_left, R.animator.slide_out_right)
+            .replace(R.id.flMainContainer, fragment, screenTag)
+            .commit()
     }
 
     fun addFragment(screenTag: String) {
         val fragment = getFragment(screenTag)
         fragmentManager.beginTransaction()
-                .setCustomAnimations(R.animator.slide_in_left, 0, 0, R.animator.slide_out_right)
-                .add(R.id.flMainContainer, fragment, screenTag)
-                .addToBackStack(screenTag)
-                .commit()
+            .setCustomAnimations(R.animator.slide_in_left, 0, 0, R.animator.slide_out_right)
+            .add(R.id.flMainContainer, fragment, screenTag)
+            .addToBackStack(screenTag)
+            .commit()
     }
 
     fun back() {

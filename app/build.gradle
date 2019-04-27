@@ -46,6 +46,7 @@ dependencies {
 
     implementation 'androidx.room:room-runtime:2.1.0-alpha06'
     implementation 'androidx.room:room-rxjava2:2.1.0-alpha06'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt 'androidx.room:room-compiler:2.1.0-alpha06'
 
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
