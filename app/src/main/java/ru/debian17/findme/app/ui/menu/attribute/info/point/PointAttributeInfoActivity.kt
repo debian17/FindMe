@@ -54,8 +54,7 @@ class PointAttributeInfoActivity : BaseActivity() {
 
         val point = GeoPoint(pointAttribute!!.latitude, pointAttribute.longitude)
         mapView.controller.setCenter(point)
-        mapView.controller.setZoom(17.0)
-
+        mapView.controller.setZoom(defaultZoom)
 
         if (routePoints != null) {
 

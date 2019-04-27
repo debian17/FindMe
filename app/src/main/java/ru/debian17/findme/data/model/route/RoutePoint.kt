@@ -11,11 +11,13 @@ class RoutePoint(
     @SerializedName("source_latitude") val startLat: Double,
     @SerializedName("target_longitude") val endLong: Double,
     @SerializedName("target_latitude") val endLat: Double,
+    @SerializedName("elapsed_time") val time: Double,
     @SerializedName("attributes") val attributes: List<Attribute>
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
+        parcel.readDouble(),
         parcel.readDouble(),
         parcel.readDouble(),
         parcel.readDouble(),
@@ -29,6 +31,7 @@ class RoutePoint(
         parcel.writeDouble(startLat)
         parcel.writeDouble(endLong)
         parcel.writeDouble(endLat)
+        parcel.writeDouble(time)
         parcel.writeTypedList(attributes)
     }
 

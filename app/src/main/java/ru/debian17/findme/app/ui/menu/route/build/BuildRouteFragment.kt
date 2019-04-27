@@ -51,9 +51,9 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
     fun providePresenter(): BuildRoutePresenter {
         val dataSourceComponent = (activity!!.application as App).getDataSourceComponent()
         return BuildRoutePresenter(
-            dataSourceComponent.provideLocationRepository(),
-            dataSourceComponent.provideAttributesRepository(),
-            dataSourceComponent.provideCategoriesRepository()
+                dataSourceComponent.provideLocationRepository(),
+                dataSourceComponent.provideAttributesRepository(),
+                dataSourceComponent.provideCategoriesRepository()
         )
     }
 
@@ -127,12 +127,12 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
 
             val selectedEdge = routePoints.minBy {
                 Distance.getSquaredDistanceToLine(
-                    eventPos.longitude,
-                    eventPos.latitude,
-                    it.startLong,
-                    it.startLat,
-                    it.endLong,
-                    it.endLat
+                        eventPos.longitude,
+                        eventPos.latitude,
+                        it.startLong,
+                        it.startLat,
+                        it.endLong,
+                        it.endLat
                 )
             }
 
@@ -145,8 +145,8 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_build_route, container, false)
     }
@@ -158,22 +158,25 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
         mapView.controller.setZoom(defaultZoom)
 
         val myLocationIcon = ContextCompat.getDrawable(context!!, R.drawable.ic_location_accent)!!
-        myLocationMarker = Marker(mapView)
-        myLocationMarker.icon = myLocationIcon
-        myLocationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
-        myLocationMarker.title = getString(R.string.current_location)
+        myLocationMarker = Marker(mapView).apply {
+            icon = myLocationIcon
+            setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
+            title = getString(R.string.current_location)
+        }
 
         val blueIcon = ContextCompat.getDrawable(context!!, R.drawable.ic_location_blue)
-        startMarker = Marker(mapView)
-        startMarker.icon = blueIcon
-        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
-        startMarker.title = getString(R.string.start_point)
+        startMarker = Marker(mapView).apply {
+            icon = blueIcon
+            setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
+            title = getString(R.string.start_point)
+        }
 
         val greenIcon = ContextCompat.getDrawable(context!!, R.drawable.ic_location_green)
-        endMarker = Marker(mapView)
-        endMarker.icon = greenIcon
-        endMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
-        endMarker.title = getString(R.string.end_point)
+        endMarker = Marker(mapView).apply {
+            icon = greenIcon
+            setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
+            title = getString(R.string.end_point)
+        }
 
         mapView.apply {
             setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
@@ -183,7 +186,7 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
             controller.setCenter(defaultPoint)
 
             val mapEventsOverlay = MapEventsOverlay(mapEventsReceiver)
-            mapView.overlays.add(mapEventsOverlay)
+            overlays.add(mapEventsOverlay)
         }
 
         ivMyLocation.setOnClickListener {
@@ -195,10 +198,10 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
         ivBuildDirection.setOnClickListener {
             if (this::myCurrentLocation.isInitialized) {
                 BuildRouteDialog.newInstance(true)
-                    .show(childFragmentManager, BuildRouteDialog.TAG)
+                        .show(childFragmentManager, BuildRouteDialog.TAG)
             } else {
                 BuildRouteDialog.newInstance(false)
-                    .show(childFragmentManager, BuildRouteDialog.TAG)
+                        .show(childFragmentManager, BuildRouteDialog.TAG)
             }
         }
 
@@ -258,12 +261,14 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
         val size = routePoints.size
 
         var distance = 0.0
+        var time = 0.0
 
         while (i < size) {
-            val line = Polyline(mapView)
-            line.title = null
-            line.infoWindow = null
-            line.setOnClickListener(routeLineOnClickListener)
+            val line = Polyline(mapView).apply {
+                title = null
+                infoWindow = null
+                setOnClickListener(routeLineOnClickListener)
+            }
 
             val item = routePoints[i]
             val start = GeoPoint(item.startLat, item.startLong)
@@ -281,6 +286,7 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
             routeLines.add(line)
 
             distance += line.distance
+            time += item.time
 
             mapView.overlays.add(line)
 
@@ -296,7 +302,8 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
         }
         val distanceResult = DistanceUtil.roundDistance(distance, 3)
         tvDistance.text = String.format(distanceTemplate, distanceResult)
-        llRouteInfo.show()
+
+        tvTime.text = (time * 60).toString()
     }
 
     private fun clearRoute() {
@@ -309,8 +316,6 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
             mapView.overlays.remove(it)
         }
 
-        llRouteInfo.hide()
-
         routePoints.clear()
         pointAttributes.clear()
 
@@ -321,14 +326,16 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
         isEndPointSelected = false
 
         mapView.invalidate()
+
         ivClearRoute.hide()
+        llRouteInfo.hide()
     }
 
     override fun onEdgeInfoLoaded(edgeInfo: EdgeInfo, categories: List<Category>) {
         val pointAttributes = ArrayList<PointAttribute>(edgeInfo.pointAttributes)
         val longAttributes = ArrayList<LongAttribute>(edgeInfo.longAttributes)
         EdgeAttributesDialog.newInstance(pointAttributes, longAttributes, ArrayList(categories), routePoints)
-            .show(childFragmentManager, EdgeAttributesDialog.TAG)
+                .show(childFragmentManager, EdgeAttributesDialog.TAG)
     }
 
     override fun onBuildRouteError(code: Int) {
