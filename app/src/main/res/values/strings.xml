@@ -53,6 +53,8 @@
     <string name="attributes_empty">Список атрибутов пуст</string>
     <string name="edit">Редактировать</string>
     <string name="delete">Удалить</string>
+    <string name="points_size_error">Выберите как минимум две точки</string>
+
 
 
 </resources>

@@ -4,6 +4,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import retrofit2.http.*
 import ru.debian17.findme.data.model.attribute.AttributeContainer
+import ru.debian17.findme.data.model.attribute.LongAttributeParams
 import ru.debian17.findme.data.model.attribute.PointAttributeParams
 import ru.debian17.findme.data.model.auth.AuthParams
 import ru.debian17.findme.data.model.auth.AuthResponse
@@ -44,5 +45,9 @@ interface WebAPI {
     @Headers(RequestTokenInterceptor.NEED_AUTH_TOKEN)
     @DELETE("attributes/{id}")
     fun deletePointAttribute(@Path("id") id: Int): Completable
+
+    @Headers(RequestTokenInterceptor.NEED_AUTH_TOKEN)
+    @POST("long_attributes")
+    fun addLongAttribute(@Body longAttributeParams: LongAttributeParams): Completable
 
 }

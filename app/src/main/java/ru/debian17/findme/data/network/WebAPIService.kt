@@ -4,6 +4,7 @@ import android.net.ConnectivityManager
 import io.reactivex.Completable
 import io.reactivex.Single
 import ru.debian17.findme.data.model.attribute.AttributeContainer
+import ru.debian17.findme.data.model.attribute.LongAttributeParams
 import ru.debian17.findme.data.model.attribute.PointAttributeParams
 import ru.debian17.findme.data.model.auth.AuthParams
 import ru.debian17.findme.data.model.auth.AuthResponse
@@ -63,6 +64,10 @@ class WebAPIService(
 
     fun deleteAttribute(id: Int): Completable {
         return prepareCompletableRequest(webAPI.deletePointAttribute(id))
+    }
+
+    fun addLongAttribute(longAttributeParams: LongAttributeParams): Completable {
+        return prepareCompletableRequest(webAPI.addLongAttribute(longAttributeParams))
     }
 
 }

@@ -22,6 +22,7 @@ import org.osmdroid.views.overlay.Polygon
 import ru.debian17.findme.R
 import ru.debian17.findme.app.App
 import ru.debian17.findme.app.ext.hide
+import ru.debian17.findme.app.ext.hideKeyboard
 import ru.debian17.findme.app.ext.longSnackBar
 import ru.debian17.findme.app.ext.show
 import ru.debian17.findme.app.mvp.BaseFragment
@@ -73,8 +74,6 @@ class AddPointAttributeFragment : BaseFragment(), AddPointAttributeView {
         override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
             if (p != null) {
 
-                llAdd.show()
-
                 selectedGeoPoint.apply {
                     latitude = p.latitude
                     longitude = p.longitude
@@ -101,10 +100,10 @@ class AddPointAttributeFragment : BaseFragment(), AddPointAttributeView {
 
             controller.setCenter(defaultPoint)
             controller.setZoom(defaultZoom)
-        }
 
-        val mapEventsOverlay = MapEventsOverlay(mapEventsReceiver)
-        mapView.overlays.add(mapEventsOverlay)
+            val mapEventsOverlay = MapEventsOverlay(mapEventsReceiver)
+            overlays.add(mapEventsOverlay)
+        }
 
         pointPolygon = Polygon(mapView).apply {
             fillColor = ContextCompat.getColor(context!!, R.color.alpha_gray)
@@ -165,6 +164,7 @@ class AddPointAttributeFragment : BaseFragment(), AddPointAttributeView {
                 return@setOnClickListener
             }
 
+            view.hideKeyboard()
             presenter.addAttribute(curCategory.id, curRadius.toDouble(), comment, selectedGeoPoint.latitude, selectedGeoPoint.longitude)
 
         }
@@ -176,7 +176,6 @@ class AddPointAttributeFragment : BaseFragment(), AddPointAttributeView {
                 R.layout.support_simple_spinner_dropdown_item,
                 categories)
         spCategories.adapter = adapter
-
     }
 
     override fun onAttributeAdded() {
