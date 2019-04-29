@@ -50,9 +50,7 @@
     <string name="selected_dot_on_map">Выберите точку на карте</string>
     <string name="write_comment">Напишите комментарий</string>
     <string name="attribute_added">Атрибут успешно добавлен</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="attributes_empty">Список атрибутов пуст</string>
 
 
 </resources>

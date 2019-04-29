@@ -4,6 +4,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import ru.debian17.findme.app.dal.AttributesDataSource
 import ru.debian17.findme.data.model.LocationParams
+import ru.debian17.findme.data.model.attribute.AttributeContainer
 import ru.debian17.findme.data.model.attribute.PointAttributeParams
 import ru.debian17.findme.data.model.edge.EdgeInfo
 import ru.debian17.findme.data.network.WebAPIService
@@ -18,6 +19,10 @@ class AttributesRepository(private val webAPIService: WebAPIService) : Attribute
         val location = LocationParams(latitude, longitude)
         val pointAttributeParams = PointAttributeParams(categoryId, radius, comment, location)
         return webAPIService.addPointAttribute(pointAttributeParams)
+    }
+
+    override fun getAttributes(): Single<AttributeContainer> {
+        return webAPIService.getAttributes()
     }
 
 }

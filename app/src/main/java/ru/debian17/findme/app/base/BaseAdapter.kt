@@ -12,13 +12,13 @@ abstract class BaseAdapter<T, VH : BaseViewHolder> : RecyclerView.Adapter<VH>() 
 
     fun add(item: T) {
         items.add(item)
-        notifyItemChanged(items.size - 1)
+        notifyItemInserted(items.size - 1)
     }
 
     fun addAll(items: List<T>) {
-        val oldSize = this.items.size
+        val position = this.items.size
         this.items.addAll(items)
-        notifyItemRangeChanged(oldSize - 1, items.size)
+        notifyItemRangeInserted(position, items.size)
     }
 
     fun replaceAll(items: List<T>) {

@@ -24,7 +24,7 @@ class WebAPIModule {
         private const val READ_TIME_OUT = 30L
         private const val WRITE_TIME_OUT = 30L
 
-        private const val BASE_URL = "http://149.154.64.95:80/api/"
+        private const val BASE_URL = "http://192.168.1.68:80/api/"
     }
 
     @Singleton
