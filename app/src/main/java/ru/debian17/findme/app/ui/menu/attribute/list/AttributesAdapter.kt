@@ -4,6 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.TextView
 import ru.debian17.findme.R
 import ru.debian17.findme.app.base.BaseAdapter
@@ -16,7 +18,18 @@ import ru.debian17.findme.data.model.category.Category
 import java.lang.RuntimeException
 
 class AttributesAdapter(context: Context,
-                        private val categories: List<Category>) : BaseAdapter<Any, BaseViewHolder>() {
+                        private val categories: List<Category>,
+                        private val attributesListener: AttributesListener) : BaseAdapter<Any, BaseViewHolder>() {
+
+    interface AttributesListener {
+        fun onPointAttributeClick(pointAttribute: PointAttribute)
+        fun onPointAttributeEdit(pointAttribute: PointAttribute)
+        fun onPointAttributeDelete(pointAttribute: PointAttribute)
+
+        fun onLongAttributeClick(longAttribute: LongAttribute)
+        fun onLongAttributeEdit(longAttribute: LongAttribute)
+        fun onLongAttributeDelete(longAttribute: LongAttribute)
+    }
 
     companion object {
         private const val VIEW_TYPE_HEADER = 0
@@ -47,7 +60,35 @@ class AttributesAdapter(context: Context,
             }
             VIEW_TYPE_POINT -> {
                 val view = layoutInflater.inflate(R.layout.item_point_attribute, parent, false)
-                PointAttributeViewHolder(view)
+                val holder = PointAttributeViewHolder(view)
+                holder.itemView.setOnClickListener {
+                    val item = items[holder.adapterPosition]
+                    if (item is PointAttribute) {
+                        attributesListener.onPointAttributeClick(item)
+                    }
+                }
+                holder.ivMenu.setOnClickListener {
+                    val item = items[holder.adapterPosition]
+                    if (item is PointAttribute) {
+                        val menu = PopupMenu(it.context, it)
+                        menu.inflate(R.menu.menu_attribute)
+                        menu.setOnMenuItemClickListener { menuItem ->
+                            when (menuItem.itemId) {
+                                R.id.edit -> {
+                                    attributesListener.onPointAttributeEdit(item)
+                                    return@setOnMenuItemClickListener true
+                                }
+                                R.id.delete -> {
+                                    attributesListener.onPointAttributeDelete(item)
+                                    return@setOnMenuItemClickListener true
+                                }
+                                else -> return@setOnMenuItemClickListener false
+                            }
+                        }
+                        menu.show()
+                    }
+                }
+                return holder
             }
             VIEW_TYPE_LONG -> {
                 val view = layoutInflater.inflate(R.layout.item_long_attribute, parent, false)
@@ -89,6 +130,7 @@ class AttributesAdapter(context: Context,
         val tvCategory: TextView = itemView.findViewById(R.id.tvCategory)
         val tvRadius: TextView = itemView.findViewById(R.id.tvRadius)
         val tvComment: TextView = itemView.findViewById(R.id.tvComment)
+        val ivMenu: ImageView = itemView.findViewById(R.id.ivMenu)
     }
 
     class LongAttributeViewHolder(itemView: View) : BaseViewHolder(itemView) {

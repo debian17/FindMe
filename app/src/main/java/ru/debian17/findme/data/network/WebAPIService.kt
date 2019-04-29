@@ -61,4 +61,8 @@ class WebAPIService(
         return prepareSingleRequest(webAPI.getAttributes())
     }
 
+    fun deleteAttribute(id: Int): Completable {
+        return prepareCompletableRequest(webAPI.deletePointAttribute(id))
+    }
+
 }

@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_attributes.*
@@ -18,10 +17,13 @@ import ru.debian17.findme.app.ext.hide
 import ru.debian17.findme.app.ext.longSnackBar
 import ru.debian17.findme.app.ext.show
 import ru.debian17.findme.app.mvp.BaseFragment
+import ru.debian17.findme.app.ui.menu.attribute.info.point.PointAttributeInfoActivity
 import ru.debian17.findme.data.model.attribute.AttributeContainer
+import ru.debian17.findme.data.model.attribute.LongAttribute
+import ru.debian17.findme.data.model.attribute.PointAttribute
 import ru.debian17.findme.data.model.category.Category
 
-class AttributesFragment : BaseFragment(), AttributesView {
+class AttributesFragment : BaseFragment(), AttributesView, AttributesAdapter.AttributesListener {
 
     companion object {
         const val TAG = "AttributesFragmentTag"
@@ -31,6 +33,7 @@ class AttributesFragment : BaseFragment(), AttributesView {
     }
 
     private lateinit var adapter: AttributesAdapter
+    private lateinit var categories: List<Category>
 
     @InjectPresenter
     lateinit var presenter: AttributesPresenter
@@ -59,7 +62,8 @@ class AttributesFragment : BaseFragment(), AttributesView {
     }
 
     override fun onDataLoaded(categories: List<Category>, attributeContainer: AttributeContainer) {
-        adapter = AttributesAdapter(context!!, categories)
+        this.categories = categories
+        adapter = AttributesAdapter(context!!, categories, this)
         rvAttributes.adapter = adapter
 
         if (attributeContainer.pointAttributes.isEmpty() && attributeContainer.longAttributes.isEmpty()) {
@@ -79,6 +83,34 @@ class AttributesFragment : BaseFragment(), AttributesView {
             }
 
         }
+
+    }
+
+    override fun onPointAttributeClick(pointAttribute: PointAttribute) {
+        val category = categories.find { it.id == pointAttribute.categoryId }
+        if (category != null) {
+            val intent = PointAttributeInfoActivity.getStartIntent(context!!, pointAttribute, category, null)
+            startActivity(intent)
+        }
+    }
+
+    override fun onPointAttributeEdit(pointAttribute: PointAttribute) {
+
+    }
+
+    override fun onPointAttributeDelete(pointAttribute: PointAttribute) {
+        presenter.deleteAttribute(pointAttribute.id)
+    }
+
+    override fun onLongAttributeClick(longAttribute: LongAttribute) {
+
+    }
+
+    override fun onLongAttributeEdit(longAttribute: LongAttribute) {
+
+    }
+
+    override fun onLongAttributeDelete(longAttribute: LongAttribute) {
 
     }
 

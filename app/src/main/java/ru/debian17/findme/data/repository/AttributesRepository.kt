@@ -25,4 +25,8 @@ class AttributesRepository(private val webAPIService: WebAPIService) : Attribute
         return webAPIService.getAttributes()
     }
 
+    override fun deleteAttribute(id: Int): Completable {
+        return webAPIService.deleteAttribute(id)
+    }
+
 }

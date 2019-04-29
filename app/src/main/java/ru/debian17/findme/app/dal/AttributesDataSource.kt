@@ -17,4 +17,6 @@ interface AttributesDataSource {
 
     fun getAttributes(): Single<AttributeContainer>
 
+    fun deleteAttribute(id: Int): Completable
+
 }

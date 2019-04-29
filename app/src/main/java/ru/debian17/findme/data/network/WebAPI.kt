@@ -41,4 +41,8 @@ interface WebAPI {
     @GET("attributes/my")
     fun getAttributes(): Single<AttributeContainer>
 
+    @Headers(RequestTokenInterceptor.NEED_AUTH_TOKEN)
+    @DELETE("attributes/{id}")
+    fun deletePointAttribute(@Path("id") id: Int): Completable
+
 }

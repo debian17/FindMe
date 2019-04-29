@@ -51,6 +51,8 @@
     <string name="write_comment">Напишите комментарий</string>
     <string name="attribute_added">Атрибут успешно добавлен</string>
     <string name="attributes_empty">Список атрибутов пуст</string>
+    <string name="edit">Редактировать</string>
+    <string name="delete">Удалить</string>
 
 
 </resources>
