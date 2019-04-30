@@ -30,7 +30,7 @@
                 android:layout_marginEnd="@dimen/default_side_margin" />
 
             <TextView
-                android:id="@+id/tvComment"
+                android:id="@+id/tvLong"
                 style="@style/PrimaryText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -39,13 +39,14 @@
                 android:layout_marginEnd="@dimen/default_side_margin" />
 
             <TextView
-                android:id="@+id/tvLong"
+                android:id="@+id/tvComment"
                 style="@style/PrimaryText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_side_margin"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="@dimen/default_side_margin" />
+                android:layout_marginEnd="@dimen/default_side_margin"
+                android:layout_marginBottom="8dp" />
 
         </LinearLayout>
 

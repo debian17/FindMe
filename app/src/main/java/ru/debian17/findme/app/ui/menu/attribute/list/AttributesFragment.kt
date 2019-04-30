@@ -17,9 +17,10 @@ import ru.debian17.findme.app.ext.hide
 import ru.debian17.findme.app.ext.longSnackBar
 import ru.debian17.findme.app.ext.show
 import ru.debian17.findme.app.mvp.BaseFragment
+import ru.debian17.findme.app.ui.menu.attribute.info.lon.LongAttributeInfoActivity
 import ru.debian17.findme.app.ui.menu.attribute.info.point.PointAttributeInfoActivity
 import ru.debian17.findme.data.model.attribute.AttributeContainer
-import ru.debian17.findme.data.model.attribute.LongAttribute
+import ru.debian17.findme.data.model.attribute.LongAttributeInfo
 import ru.debian17.findme.data.model.attribute.PointAttribute
 import ru.debian17.findme.data.model.category.Category
 
@@ -102,16 +103,22 @@ class AttributesFragment : BaseFragment(), AttributesView, AttributesAdapter.Att
         presenter.deleteAttribute(pointAttribute.id)
     }
 
-    override fun onLongAttributeClick(longAttribute: LongAttribute) {
+    override fun onLongAttributeClick(longAttribute: LongAttributeInfo) {
+        val category = categories.find { it.id == longAttribute.categoryId }
+        if (category != null) {
+            val intent = LongAttributeInfoActivity.getStartIntent(context!!, longAttribute, category, null)
+            startActivity(intent)
+        }
+
 
     }
 
-    override fun onLongAttributeEdit(longAttribute: LongAttribute) {
+    override fun onLongAttributeEdit(longAttribute: LongAttributeInfo) {
 
     }
 
-    override fun onLongAttributeDelete(longAttribute: LongAttribute) {
-
+    override fun onLongAttributeDelete(longAttribute: LongAttributeInfo) {
+        presenter.deleteAttribute(longAttribute.id)
     }
 
     override fun onError(errorMessage: String?) {

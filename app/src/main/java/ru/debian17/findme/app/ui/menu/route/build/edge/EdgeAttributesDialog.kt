@@ -11,14 +11,14 @@ import ru.debian17.findme.app.androidx.MvpBottomSheetDialogFragment
 import ru.debian17.findme.app.base.Header
 import ru.debian17.findme.app.ui.menu.attribute.info.lon.LongAttributeInfoActivity
 import ru.debian17.findme.app.ui.menu.attribute.info.point.PointAttributeInfoActivity
-import ru.debian17.findme.data.model.attribute.LongAttribute
+import ru.debian17.findme.data.model.attribute.LongAttributeInfo
 import ru.debian17.findme.data.model.attribute.PointAttribute
 import ru.debian17.findme.data.model.category.Category
 import ru.debian17.findme.data.model.route.RoutePoint
 
 
 class EdgeAttributesDialog : MvpBottomSheetDialogFragment(),
-    EdgeAttributesAdapter.EdgeAttributesListener {
+        EdgeAttributesAdapter.EdgeAttributesListener {
 
     companion object {
         private const val POINT_ATTRIBUTES_KEY = "pointAttributesKey"
@@ -27,10 +27,10 @@ class EdgeAttributesDialog : MvpBottomSheetDialogFragment(),
         private const val ROUTE_POINTS_KEY = "routePointsKey"
         const val TAG = "AttributesDialogTag"
         fun newInstance(
-            pointAttributes: ArrayList<PointAttribute>,
-            longAttributes: ArrayList<LongAttribute>,
-            categories: ArrayList<Category>,
-            routePoints: ArrayList<RoutePoint>
+                pointAttributes: ArrayList<PointAttribute>,
+                longAttributes: ArrayList<LongAttributeInfo>,
+                categories: ArrayList<Category>,
+                routePoints: ArrayList<RoutePoint>
         ): EdgeAttributesDialog {
             return EdgeAttributesDialog().apply {
                 arguments = Bundle().apply {
@@ -44,7 +44,7 @@ class EdgeAttributesDialog : MvpBottomSheetDialogFragment(),
     }
 
     private lateinit var pointAttributes: List<PointAttribute>
-    private lateinit var longAttributes: List<LongAttribute>
+    private lateinit var longAttributes: List<LongAttributeInfo>
     private lateinit var routePoints: ArrayList<RoutePoint>
     private lateinit var categories: List<Category>
     private lateinit var adapter: EdgeAttributesAdapter
@@ -83,23 +83,23 @@ class EdgeAttributesDialog : MvpBottomSheetDialogFragment(),
         val category = categories.find { it.id == pointAttribute.categoryId }
         if (category != null) {
             val intent = PointAttributeInfoActivity.getStartIntent(
-                context!!,
-                pointAttribute,
-                category,
-                routePoints
+                    context!!,
+                    pointAttribute,
+                    category,
+                    routePoints
             )
             startActivity(intent)
         }
     }
 
-    override fun onLongAttributeClick(longAttribute: LongAttribute) {
+    override fun onLongAttributeClick(longAttribute: LongAttributeInfo) {
         val category = categories.find { it.id == longAttribute.categoryId }
         if (category != null) {
             val intent = LongAttributeInfoActivity.getStartIntent(
-                context!!,
-                longAttribute,
-                category,
-                routePoints
+                    context!!,
+                    longAttribute,
+                    category,
+                    routePoints
             )
             startActivity(intent)
         }

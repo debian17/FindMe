@@ -42,7 +42,7 @@
     <string name="radius">Радиус</string>
     <string name="latitude">Широта</string>
     <string name="longitude">Долгота</string>
-    <string name="long_attr">Длинна</string>
+    <string name="length">Длинна</string>
     <string name="point_attribute">Точечный атрибут</string>
     <string name="long_attribute">Протяженный атрибут</string>
     <string name="about_time_minutes">Приблизительное время %.2f мин.</string>
@@ -54,7 +54,8 @@
     <string name="edit">Редактировать</string>
     <string name="delete">Удалить</string>
     <string name="points_size_error">Выберите как минимум две точки</string>
-
+    <string name="length_template_meters">Длина: %.0f м.</string>
+    <string name="length_template_kilo_meters">Длинна: %.3f км.</string>
 
 
 </resources>

@@ -57,7 +57,6 @@ class AttributesPresenter(private val categoryDataSource: CategoriesDataSource,
                 .doOnError {
                     errorBody = getError(it)
                 }
-
                 .observeOnUI()
                 .subscribe(this::onDataLoaded, this::onError)
     }

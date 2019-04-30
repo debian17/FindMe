@@ -8,14 +8,14 @@ import ru.debian17.findme.R
 import ru.debian17.findme.app.base.BaseAdapter
 import ru.debian17.findme.app.base.BaseViewHolder
 import ru.debian17.findme.app.base.Header
-import ru.debian17.findme.data.model.attribute.LongAttribute
+import ru.debian17.findme.data.model.attribute.LongAttributeInfo
 import ru.debian17.findme.data.model.attribute.PointAttribute
 import ru.debian17.findme.data.model.category.Category
 import java.lang.RuntimeException
 
 class EdgeAttributesAdapter(
-    private val categories: List<Category>,
-    private val edgeAttributesListener: EdgeAttributesListener
+        private val categories: List<Category>,
+        private val edgeAttributesListener: EdgeAttributesListener
 ) : BaseAdapter<Any, BaseViewHolder>() {
 
     companion object {
@@ -26,7 +26,7 @@ class EdgeAttributesAdapter(
 
     interface EdgeAttributesListener {
         fun onPointAttributeClick(pointAttribute: PointAttribute)
-        fun onLongAttributeClick(longAttribute: LongAttribute)
+        fun onLongAttributeClick(longAttribute: LongAttributeInfo)
     }
 
 
@@ -34,7 +34,7 @@ class EdgeAttributesAdapter(
         return when (val item = items[position]) {
             is Header -> VIEW_TYPE_HEADER
             is PointAttribute -> VIEW_TYPE_POINT
-            is LongAttribute -> VIEW_TYPE_LONG
+            is LongAttributeInfo -> VIEW_TYPE_LONG
             else -> throw RuntimeException("Unknown item=$item")
         }
     }
@@ -63,7 +63,7 @@ class EdgeAttributesAdapter(
                 holder.itemView.setOnClickListener {
                     val position = holder.adapterPosition
                     val item = items[position]
-                    if (item is LongAttribute) {
+                    if (item is LongAttributeInfo) {
                         edgeAttributesListener.onLongAttributeClick(item)
                     }
                 }
@@ -83,7 +83,7 @@ class EdgeAttributesAdapter(
             if (category != null) {
                 holder.tvCategory.text = category.name
             }
-        } else if (item is LongAttribute && holder is LongViewHolder) {
+        } else if (item is LongAttributeInfo && holder is LongViewHolder) {
             val category = categories.find { item.categoryId == it.id }
             if (category != null) {
                 holder.tvCategory.text = category.name

@@ -28,7 +28,7 @@ import ru.debian17.findme.app.ext.show
 import ru.debian17.findme.app.mvp.BaseFragment
 import ru.debian17.findme.app.ui.menu.route.build.edge.EdgeAttributesDialog
 import ru.debian17.findme.app.util.DistanceUtil
-import ru.debian17.findme.data.model.attribute.LongAttribute
+import ru.debian17.findme.data.model.attribute.LongAttributeInfo
 import ru.debian17.findme.data.model.attribute.PointAttribute
 import ru.debian17.findme.data.model.category.Category
 import ru.debian17.findme.data.model.edge.EdgeInfo
@@ -333,7 +333,7 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
 
     override fun onEdgeInfoLoaded(edgeInfo: EdgeInfo, categories: List<Category>) {
         val pointAttributes = ArrayList<PointAttribute>(edgeInfo.pointAttributes)
-        val longAttributes = ArrayList<LongAttribute>(edgeInfo.longAttributes)
+        val longAttributes = ArrayList<LongAttributeInfo>(edgeInfo.longAttributes)
         EdgeAttributesDialog.newInstance(pointAttributes, longAttributes, ArrayList(categories), routePoints)
                 .show(childFragmentManager, EdgeAttributesDialog.TAG)
     }
