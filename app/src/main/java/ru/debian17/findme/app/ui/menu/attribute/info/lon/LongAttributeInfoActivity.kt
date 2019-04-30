@@ -116,7 +116,7 @@ class LongAttributeInfoActivity : BaseActivity() {
         val distanceResult = DistanceUtil.roundDistance(length, 3)
         tvLong.text = String.format(distanceTemplate, distanceResult)
 
-        tvComment.text = "${getString(R.string.comment)}: ${longAttribute!!.comment} asdasadasdsadasdasdsadasdadasdasdasdasasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdsadasdasdsadasdasdasdasdasdsadsadasasdsadsaasd"
+        tvComment.text = "${getString(R.string.comment)}: ${longAttribute!!.comment}"
 
     }
 }
