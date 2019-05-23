@@ -26,10 +26,10 @@ class LongAttributeInfoActivity : BaseActivity() {
         private const val CATEGORY_KEY = "categoryKey"
         private const val ROUTE_POINTS_KEY = "routePointsKey"
         fun getStartIntent(
-                context: Context,
-                longAttribute: LongAttributeInfo,
-                category: Category,
-                routePoints: ArrayList<RoutePoint>?
+            context: Context,
+            longAttribute: LongAttributeInfo,
+            category: Category,
+            routePoints: ArrayList<RoutePoint>?
         ): Intent {
             return Intent(context, LongAttributeInfoActivity::class.java).apply {
                 putExtra(LONG_ATTRIBUTE_KEY, longAttribute)
@@ -51,7 +51,6 @@ class LongAttributeInfoActivity : BaseActivity() {
             setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
             zoomController.setVisibility(CustomZoomButtonsController.Visibility.ALWAYS)
             setMultiTouchControls(true)
-            controller.setCenter(defaultPoint)
             controller.setZoom(defaultZoom)
         }
 
@@ -104,7 +103,15 @@ class LongAttributeInfoActivity : BaseActivity() {
             i++
         }
 
-        mapView.invalidate()
+        val centerEdge = edges[edgesCount / 2]
+        val start = GeoPoint(centerEdge.startLat, centerEdge.startLon)
+        val end = GeoPoint(centerEdge.endLat, centerEdge.endLon)
+        val center = GeoPoint.fromCenterBetween(start, end)
+
+        mapView.apply {
+            controller.setCenter(center)
+            invalidate()
+        }
 
         tvCategory.text = "${getString(R.string.category)}: ${category.name}"
 
