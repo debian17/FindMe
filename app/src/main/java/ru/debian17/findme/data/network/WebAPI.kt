@@ -50,4 +50,8 @@ interface WebAPI {
     @POST("long_attributes")
     fun addLongAttribute(@Body longAttributeParams: LongAttributeParams): Completable
 
+    @Headers(RequestTokenInterceptor.NEED_AUTH_TOKEN)
+    @PUT("point_attributes/{id}")
+    fun editLocalBarrier(@Path("id") barrierId: Int, @Body pointAttributeParams: PointAttributeParams): Completable
+
 }

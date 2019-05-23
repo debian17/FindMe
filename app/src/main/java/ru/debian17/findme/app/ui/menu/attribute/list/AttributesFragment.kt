@@ -1,6 +1,8 @@
 package ru.debian17.findme.app.ui.menu.attribute.list
 
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +19,7 @@ import ru.debian17.findme.app.ext.hide
 import ru.debian17.findme.app.ext.longSnackBar
 import ru.debian17.findme.app.ext.show
 import ru.debian17.findme.app.mvp.BaseFragment
+import ru.debian17.findme.app.ui.menu.attribute.edit.point.EditPointAttributeActivity
 import ru.debian17.findme.app.ui.menu.attribute.info.lon.LongAttributeInfoActivity
 import ru.debian17.findme.app.ui.menu.attribute.info.point.PointAttributeInfoActivity
 import ru.debian17.findme.data.model.attribute.AttributeContainer
@@ -27,6 +30,7 @@ import ru.debian17.findme.data.model.category.Category
 class AttributesFragment : BaseFragment(), AttributesView, AttributesAdapter.AttributesListener {
 
     companion object {
+        private const val EDIT_ATTR_CODE = 123
         const val TAG = "AttributesFragmentTag"
         fun newInstance(): AttributesFragment {
             return AttributesFragment()
@@ -42,8 +46,10 @@ class AttributesFragment : BaseFragment(), AttributesView, AttributesAdapter.Att
     @ProvidePresenter
     fun providePresenter(): AttributesPresenter {
         val dataSourceComponent = (activity!!.applicationContext as App).getDataSourceComponent()
-        return AttributesPresenter(dataSourceComponent.provideCategoriesRepository(),
-                dataSourceComponent.provideAttributesRepository())
+        return AttributesPresenter(
+                dataSourceComponent.provideCategoriesRepository(),
+                dataSourceComponent.provideAttributesRepository()
+        )
     }
 
     override fun onCreateView(
@@ -96,7 +102,10 @@ class AttributesFragment : BaseFragment(), AttributesView, AttributesAdapter.Att
     }
 
     override fun onPointAttributeEdit(pointAttribute: PointAttribute) {
-
+        startActivityForResult(
+                EditPointAttributeActivity.getStartIntent(context!!, pointAttribute),
+                EDIT_ATTR_CODE
+        )
     }
 
     override fun onPointAttributeDelete(pointAttribute: PointAttribute) {
@@ -109,8 +118,6 @@ class AttributesFragment : BaseFragment(), AttributesView, AttributesAdapter.Att
             val intent = LongAttributeInfoActivity.getStartIntent(context!!, longAttribute, category, null)
             startActivity(intent)
         }
-
-
     }
 
     override fun onLongAttributeEdit(longAttribute: LongAttributeInfo) {
@@ -119,6 +126,12 @@ class AttributesFragment : BaseFragment(), AttributesView, AttributesAdapter.Att
 
     override fun onLongAttributeDelete(longAttribute: LongAttributeInfo) {
         presenter.deleteAttribute(longAttribute.id)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == EDIT_ATTR_CODE && resultCode == Activity.RESULT_OK) {
+            presenter.getAttributes()
+        }
     }
 
     override fun onError(errorMessage: String?) {

@@ -9,7 +9,6 @@ import ru.debian17.findme.data.model.attribute.AttributeContainer
 import ru.debian17.findme.data.model.attribute.LongAttributeParams
 import ru.debian17.findme.data.model.attribute.PointAttributeParams
 import ru.debian17.findme.data.model.edge.EdgeInfo
-import ru.debian17.findme.data.model.route.RoutePoint
 import ru.debian17.findme.data.network.WebAPIService
 
 class AttributesRepository(private val webAPIService: WebAPIService) : AttributesDataSource {
@@ -37,6 +36,12 @@ class AttributesRepository(private val webAPIService: WebAPIService) : Attribute
             LocationParams(it.latitude, it.longitude)
         })
         return webAPIService.addLongAttribute(longAttributeParams)
+    }
+
+    override fun editLocalBarrier(barrierId: Int, categoryId: Int, radius: Double, comment: String, latitude: Double, longitude: Double): Completable {
+        val location = LocationParams(latitude, longitude)
+        val pointAttributeParams = PointAttributeParams(categoryId, radius, comment, location)
+        return webAPIService.editLocalBarrier(barrierId, pointAttributeParams)
     }
 
 }

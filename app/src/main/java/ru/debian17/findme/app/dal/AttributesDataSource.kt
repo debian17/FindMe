@@ -5,7 +5,6 @@ import io.reactivex.Single
 import org.osmdroid.util.GeoPoint
 import ru.debian17.findme.data.model.attribute.AttributeContainer
 import ru.debian17.findme.data.model.edge.EdgeInfo
-import ru.debian17.findme.data.model.route.RoutePoint
 
 interface AttributesDataSource {
 
@@ -22,5 +21,12 @@ interface AttributesDataSource {
     fun deleteAttribute(id: Int): Completable
 
     fun addLongAttribute(categoryId: Int, comment: String, points: List<GeoPoint>): Completable
+
+    fun editLocalBarrier(barrierId: Int,
+                         categoryId: Int,
+                         radius: Double,
+                         comment: String,
+                         latitude: Double,
+                         longitude: Double): Completable
 
 }

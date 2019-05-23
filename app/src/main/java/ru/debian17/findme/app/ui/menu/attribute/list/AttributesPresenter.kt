@@ -46,7 +46,8 @@ class AttributesPresenter(private val categoryDataSource: CategoriesDataSource,
         unsubscribeOnDestroy(getAttributes())
     }
 
-    private fun getAttributes(): Disposable {
+    fun getAttributes(): Disposable {
+        viewState.showLoading()
         val categoriesSource = categoryDataSource.getCategories()
         val attributesSource = attributesDataSource.getAttributes()
 

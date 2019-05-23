@@ -40,7 +40,6 @@ class AttributesAdapter(context: Context,
 
     private val categoryTitle = context.getString(R.string.category)
     private val radiusTitle = context.getString(R.string.radius)
-    private val lengthTitle = context.getString(R.string.length)
     private val commentTitle = context.getString(R.string.comment)
 
     override fun getItemViewType(position: Int): Int {

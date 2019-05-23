@@ -16,6 +16,7 @@
     <string name="add_route">Добавить маршрут</string>
     <string name="attributes_list">Список атриубтов</string>
     <string name="add_attribute">Добавить атрибут</string>
+    <string name="edit_barrier">Редактировать препятствие</string>
     <string name="logout">Выйти из аккаунта</string>
     <string name="registration_success">Регистрация прошла успешно</string>
     <string name="email_already_exist">Пользователь с таким Email уже существует</string>

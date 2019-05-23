@@ -20,6 +20,8 @@
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true"
             tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".app.ui.menu.attribute.edit.point.EditPointAttributeActivity">
+        </activity>
         <activity android:name=".app.ui.menu.attribute.info.lon.LongAttributeInfoActivity">
         </activity>
         <activity android:name=".app.ui.menu.attribute.info.point.PointAttributeInfoActivity">
