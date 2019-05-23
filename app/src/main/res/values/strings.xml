@@ -14,8 +14,8 @@
     <string name="make_registration">Зарегистрироваться</string>
     <string name="build_route">Построить маршрут</string>
     <string name="add_route">Добавить маршрут</string>
-    <string name="attributes_list">Список атриубтов</string>
-    <string name="add_attribute">Добавить атрибут</string>
+    <string name="attributes_list">Список препятствий</string>
+    <string name="add_attribute">Добавить препятствие</string>
     <string name="edit_barrier">Редактировать препятствие</string>
     <string name="logout">Выйти из аккаунта</string>
     <string name="registration_success">Регистрация прошла успешно</string>
@@ -35,28 +35,26 @@
     <string name="from_selected_dot">Между двумя точками</string>
     <string name="distance_template_meters">Длина маршрута %.0f м.</string>
     <string name="distance_template_kilo_meters">Длинна маршрута %.3f км.</string>
-    <string name="point_attributes">Точечные атрибуты</string>
-    <string name="long_attributes">Протяженные атрибуты</string>
-    <string name="categories_file_name">categories.txt</string>
+    <string name="point_attributes">Локальные препятствия</string>
+    <string name="long_attributes">Протяженные препятствия</string>
     <string name="category">Категория</string>
     <string name="comment">Комментарий</string>
     <string name="radius">Радиус</string>
     <string name="latitude">Широта</string>
     <string name="longitude">Долгота</string>
     <string name="length">Длинна</string>
-    <string name="point_attribute">Точечный атрибут</string>
-    <string name="long_attribute">Протяженный атрибут</string>
+    <string name="point_attribute">Локальное препятствие</string>
+    <string name="long_attribute">Протяженное препятствие</string>
     <string name="about_time_minutes">Приблизительное время %.2f мин.</string>
     <string name="write_comment_hint">Напишите комментарий</string>
     <string name="selected_dot_on_map">Выберите точку на карте</string>
     <string name="write_comment">Напишите комментарий</string>
-    <string name="attribute_added">Атрибут успешно добавлен</string>
-    <string name="attributes_empty">Список атрибутов пуст</string>
+    <string name="attribute_added">Перпятствие успешно зафиксировано</string>
+    <string name="attributes_empty">Список препятствий пуст</string>
     <string name="edit">Редактировать</string>
     <string name="delete">Удалить</string>
     <string name="points_size_error">Выберите как минимум две точки</string>
     <string name="length_template_meters">Длина: %.0f м.</string>
     <string name="length_template_kilo_meters">Длинна: %.3f км.</string>
-
 
 </resources>
