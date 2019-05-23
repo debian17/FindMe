@@ -44,4 +44,11 @@ class AttributesRepository(private val webAPIService: WebAPIService) : Attribute
         return webAPIService.editLocalBarrier(barrierId, pointAttributeParams)
     }
 
+    override fun editLongBarrier(barrierId: Int, categoryId: Int, comment: String, points: List<GeoPoint>): Completable {
+        val longAttributeParams = LongAttributeParams(categoryId, comment, points.map {
+            LocationParams(it.latitude, it.longitude)
+        })
+        return webAPIService.editLongBarrier(barrierId, longAttributeParams)
+    }
+
 }

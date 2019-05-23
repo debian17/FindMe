@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_attributes.*
+import org.osmdroid.util.GeoPoint
 
 import ru.debian17.findme.R
 import ru.debian17.findme.app.App
@@ -19,6 +20,7 @@ import ru.debian17.findme.app.ext.hide
 import ru.debian17.findme.app.ext.longSnackBar
 import ru.debian17.findme.app.ext.show
 import ru.debian17.findme.app.mvp.BaseFragment
+import ru.debian17.findme.app.ui.menu.attribute.edit.lon.EditLongBarrierActivity
 import ru.debian17.findme.app.ui.menu.attribute.edit.point.EditPointAttributeActivity
 import ru.debian17.findme.app.ui.menu.attribute.info.lon.LongAttributeInfoActivity
 import ru.debian17.findme.app.ui.menu.attribute.info.point.PointAttributeInfoActivity
@@ -121,6 +123,24 @@ class AttributesFragment : BaseFragment(), AttributesView, AttributesAdapter.Att
     }
 
     override fun onLongAttributeEdit(longAttribute: LongAttributeInfo) {
+
+        val size = longAttribute.edges.size
+        val centerEdge = longAttribute.edges[size / 2]
+
+        val start = GeoPoint(centerEdge.startLat, centerEdge.startLon)
+        val end = GeoPoint(centerEdge.endLat, centerEdge.endLon)
+        val center = GeoPoint.fromCenterBetween(start, end)
+
+        val latitude = center.latitude
+        val longitude = center.longitude
+
+        startActivityForResult(EditLongBarrierActivity.getStartIntent(context!!,
+                longAttribute.id,
+                latitude,
+                longitude,
+                longAttribute.categoryId,
+                longAttribute.comment),
+                EDIT_ATTR_CODE)
 
     }
 

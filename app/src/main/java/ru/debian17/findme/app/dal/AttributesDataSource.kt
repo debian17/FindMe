@@ -29,4 +29,9 @@ interface AttributesDataSource {
                          latitude: Double,
                          longitude: Double): Completable
 
+    fun editLongBarrier(barrierId: Int,
+                        categoryId: Int,
+                        comment: String,
+                        points: List<GeoPoint>): Completable
+
 }

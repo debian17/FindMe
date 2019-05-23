@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".app.ui.menu.attribute.add.point.AddPointAttributeFragment">
+
+    <LinearLayout
+        android:id="@+id/llMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".app.ui.menu.attribute.add.point.AddPointAttributeFragment">
+
+        <org.osmdroid.views.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/tvCategory"
+                    style="@style/PrimaryText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_side_margin"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="@dimen/default_side_margin"
+                    android:text="@string/category" />
+
+                <Spinner
+                    android:id="@+id/spCategories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_side_margin" />
+
+                <TextView
+                    android:id="@+id/tvComment"
+                    style="@style/PrimaryText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_side_margin"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="@dimen/default_side_margin"
+                    android:text="@string/comment" />
+
+                <EditText
+                    android:id="@+id/etComment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_side_margin"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="@dimen/default_side_margin"
+                    android:hint="@string/write_comment_hint"
+                    android:inputType="textCapSentences"
+                    android:maxLines="3" />
+
+                <Button
+                    android:id="@+id/btnEditBarrier"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="@dimen/default_side_margin"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="@dimen/default_side_margin"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/shape_button_background"
+                    android:text="@string/edit_barrier"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        style="@style/LoadingProgressBar" />
+
+</FrameLayout>

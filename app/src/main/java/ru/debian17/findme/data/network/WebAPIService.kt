@@ -74,4 +74,8 @@ class WebAPIService(
         return prepareCompletableRequest(webAPI.editLocalBarrier(barrierId, pointAttributeParams))
     }
 
+    fun editLongBarrier(barrierId: Int, longAttributeParams: LongAttributeParams): Completable {
+        return prepareCompletableRequest(webAPI.editLongBarrier(barrierId, longAttributeParams))
+    }
+
 }
