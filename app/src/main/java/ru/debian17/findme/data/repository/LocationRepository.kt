@@ -4,9 +4,11 @@ import android.content.Context
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
+import io.reactivex.Completable
 import io.reactivex.Single
 import org.osmdroid.util.GeoPoint
 import ru.debian17.findme.app.dal.LocationDataSource
+import ru.debian17.findme.data.model.route.RouteDotParam
 import ru.debian17.findme.data.model.route.RouteParam
 import ru.debian17.findme.data.model.route.RoutePoint
 import ru.debian17.findme.data.model.route.RoutePointParam
@@ -40,6 +42,10 @@ class LocationRepository(context: Context,
         val endPointParam = RoutePointParam(endPoint.longitude, endPoint.latitude)
         val routeParams = RouteParam(startPointParam, endPointParam)
         return webAPIService.buildRoute(routeParams)
+    }
+
+    override fun addRoute(routeDots: List<RouteDotParam>): Completable {
+        return webAPIService.addRoute(routeDots)
     }
 
 }

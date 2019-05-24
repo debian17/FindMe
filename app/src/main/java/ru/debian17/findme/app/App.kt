@@ -1,6 +1,7 @@
 package ru.debian17.findme.app
 
 import androidx.multidex.MultiDexApplication
+import com.jakewharton.threetenabp.AndroidThreeTen
 import ru.debian17.findme.app.di.component.AppComponent
 import ru.debian17.findme.app.di.component.DaggerAppComponent
 import ru.debian17.findme.app.di.component.DaggerDataSourceComponent
@@ -15,6 +16,7 @@ class App : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
+        AndroidThreeTen.init(this)
 
         val contextModule = ContextModule(this)
 

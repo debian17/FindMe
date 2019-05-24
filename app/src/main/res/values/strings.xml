@@ -56,5 +56,8 @@
     <string name="points_size_error">Выберите как минимум две точки</string>
     <string name="length_template_meters">Длина: %.0f м.</string>
     <string name="length_template_kilo_meters">Длинна: %.3f км.</string>
+    <string name="start">Старт</string>
+    <string name="stop">Стоп</string>
+    <string name="save_route">Сохранить маршрут</string>
 
 </resources>

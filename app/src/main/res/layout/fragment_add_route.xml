@@ -5,9 +5,42 @@
     android:layout_height="match_parent"
     tools:context=".app.ui.menu.route.add.AddRouteFragment">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/llMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Add Route" />
+        android:orientation="vertical"
+        tools:context=".app.ui.menu.route.add.AddRouteFragment">
+
+        <org.osmdroid.views.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5" />
+
+        <LinearLayout
+            android:id="@+id/llMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnSaveRoute"
+                style="@style/PrimaryButton"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginStart="@dimen/default_side_margin"
+                android:layout_marginTop="@dimen/default_side_margin"
+                android:layout_marginEnd="@dimen/default_side_margin"
+                android:layout_marginBottom="@dimen/default_side_margin"
+                android:text="@string/save_route" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        style="@style/LoadingProgressBar" />
 
 </FrameLayout>

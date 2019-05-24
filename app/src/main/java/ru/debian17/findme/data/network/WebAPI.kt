@@ -11,6 +11,7 @@ import ru.debian17.findme.data.model.auth.AuthResponse
 import ru.debian17.findme.data.model.category.Category
 import ru.debian17.findme.data.model.edge.EdgeInfo
 import ru.debian17.findme.data.model.registration.RegistrationParams
+import ru.debian17.findme.data.model.route.RouteDotParam
 import ru.debian17.findme.data.model.route.RouteParam
 import ru.debian17.findme.data.model.route.RoutePoint
 
@@ -58,4 +59,7 @@ interface WebAPI {
     @PUT("long_attributes/{id}")
     fun editLongBarrier(@Path("id") barrierId: Int, @Body longAttributeParams: LongAttributeParams): Completable
 
+    @Headers(RequestTokenInterceptor.NEED_AUTH_TOKEN)
+    @POST("route")
+    fun addRoute(@Body routeDots: List<RouteDotParam>): Completable
 }

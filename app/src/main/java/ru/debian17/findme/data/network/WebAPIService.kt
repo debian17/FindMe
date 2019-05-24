@@ -11,6 +11,7 @@ import ru.debian17.findme.data.model.auth.AuthResponse
 import ru.debian17.findme.data.model.category.Category
 import ru.debian17.findme.data.model.edge.EdgeInfo
 import ru.debian17.findme.data.model.registration.RegistrationParams
+import ru.debian17.findme.data.model.route.RouteDotParam
 import ru.debian17.findme.data.model.route.RouteParam
 import ru.debian17.findme.data.model.route.RoutePoint
 
@@ -76,6 +77,10 @@ class WebAPIService(
 
     fun editLongBarrier(barrierId: Int, longAttributeParams: LongAttributeParams): Completable {
         return prepareCompletableRequest(webAPI.editLongBarrier(barrierId, longAttributeParams))
+    }
+
+    fun addRoute(routeDots: List<RouteDotParam>): Completable {
+        return prepareCompletableRequest(webAPI.addRoute(routeDots))
     }
 
 }
