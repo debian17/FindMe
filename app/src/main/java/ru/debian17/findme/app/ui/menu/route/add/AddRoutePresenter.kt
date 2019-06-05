@@ -1,7 +1,6 @@
 package ru.debian17.findme.app.ui.menu.route.add
 
 import android.location.Location
-import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
@@ -9,12 +8,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import org.osmdroid.util.GeoPoint
-import org.threeten.bp.OffsetDateTime
 import ru.debian17.findme.app.dal.LocationDataSource
 import ru.debian17.findme.app.ext.observeOnUI
 import ru.debian17.findme.app.ext.subscribeOnIO
 import ru.debian17.findme.app.mvp.BasePresenter
-import ru.debian17.findme.data.model.LocationParams
 import ru.debian17.findme.data.model.route.RouteDotParam
 import ru.debian17.findme.data.model.route.RoutePointParam
 import java.util.*
