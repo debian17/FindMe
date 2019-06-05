@@ -26,6 +26,7 @@ class AddLongAttributePresenter(
                 .doOnError {
                     errorBody = getError(it)
                 }
+                .map { list -> list.filter { it.isLong } }
                 .observeOnUI()
                 .subscribe(this::onCategoriesLoaded, this::onError))
     }

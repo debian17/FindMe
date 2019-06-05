@@ -20,6 +20,7 @@ class AddPointAttributePresenter(private val categoriesDataSource: CategoriesDat
                 .doOnError {
                     errorBody = getError(it)
                 }
+                .map { list -> list.filter { it.isPoint } }
                 .observeOnUI()
                 .subscribe(this::onCategoriesLoaded, this::onError))
     }
