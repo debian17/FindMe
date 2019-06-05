@@ -261,7 +261,6 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
         val size = routePoints.size
 
         var distance = 0.0
-        var time = 0.0
 
         while (i < size) {
             val line = Polyline(mapView).apply {
@@ -286,7 +285,6 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
             routeLines.add(line)
 
             distance += line.distance
-            time += item.time
 
             mapView.overlays.add(line)
 
@@ -302,8 +300,6 @@ class BuildRouteFragment : BaseFragment(), BuildRouteView, BuildRouteDialog.Buil
         }
         val distanceResult = DistanceUtil.roundDistance(distance, 3)
         tvDistance.text = String.format(distanceTemplate, distanceResult)
-
-        tvTime.text = (time * 60).toString()
     }
 
     private fun clearRoute() {
