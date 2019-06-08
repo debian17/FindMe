@@ -35,13 +35,15 @@ class MenuFragment : BaseFragment(), MenuView, ChooseAttributeTypeDialog.ChooseA
 
     @ProvidePresenter
     fun providePresenter(): MenuPresenter {
-        return MenuPresenter((activity!!.application as App).getDataSourceComponent()
-                .provideAuthRepository())
+        return MenuPresenter(
+            (activity!!.application as App).getDataSourceComponent()
+                .provideAuthRepository()
+        )
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_menu, container, false)
     }
@@ -53,9 +55,9 @@ class MenuFragment : BaseFragment(), MenuView, ChooseAttributeTypeDialog.ChooseA
             navigator.addFragment(BuildRouteFragment.TAG)
         }
 
-        llAddRoute.setOnClickListener {
-            navigator.addFragment(AddRouteFragment.TAG)
-        }
+//        llAddRoute.setOnClickListener {
+//            navigator.addFragment(AddRouteFragment.TAG)
+//        }
 
         llAttributes.setOnClickListener {
             navigator.addFragment(AttributesFragment.TAG)
@@ -63,7 +65,7 @@ class MenuFragment : BaseFragment(), MenuView, ChooseAttributeTypeDialog.ChooseA
 
         llAddAttribute.setOnClickListener {
             ChooseAttributeTypeDialog.newInstance()
-                    .show(childFragmentManager, ChooseAttributeTypeDialog.TAG)
+                .show(childFragmentManager, ChooseAttributeTypeDialog.TAG)
         }
 
         llLogout.setOnClickListener {

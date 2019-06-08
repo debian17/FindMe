@@ -45,7 +45,8 @@
             android:id="@+id/llAddRoute"
             android:layout_width="match_parent"
             android:layout_height="96dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="24dp"
@@ -70,7 +71,8 @@
             android:layout_height="1dp"
             android:layout_marginStart="@dimen/default_side_margin"
             android:layout_marginEnd="@dimen/default_side_margin"
-            android:background="@color/gray" />
+            android:background="@color/gray"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/llAttributes"
