@@ -10,20 +10,22 @@ import ru.debian17.findme.app.mvp.BasePresenter
 import ru.debian17.findme.data.model.category.Category
 
 @InjectViewState
-class EditLongBarrierPresenter(private val categoriesDataSource: CategoriesDataSource,
-                               private val attributesDataSource: AttributesDataSource
+class EditLongBarrierPresenter(
+    private val categoriesDataSource: CategoriesDataSource,
+    private val attributesDataSource: AttributesDataSource
 ) : BasePresenter<EditLongBarrierView>() {
 
 
     override fun onFirstViewAttach() {
         viewState.showLoading()
         unsubscribeOnDestroy(categoriesDataSource.getCategories()
-                .subscribeOnIO()
-                .doOnError {
-                    errorBody = getError(it)
-                }
-                .observeOnUI()
-                .subscribe(this::onCategoriesLoaded, this::onError))
+            .subscribeOnIO()
+            .doOnError {
+                errorBody = getError(it)
+            }
+            .map { list -> list.filter { it.isLong } }
+            .observeOnUI()
+            .subscribe(this::onCategoriesLoaded, this::onError))
     }
 
     private fun onCategoriesLoaded(categories: List<Category>) {
@@ -39,16 +41,17 @@ class EditLongBarrierPresenter(private val categoriesDataSource: CategoriesDataS
     fun editLongBarrier(barrierId: Int, categoryId: Int, comment: String, points: List<GeoPoint>) {
         viewState.showLoading()
         unsubscribeOnDestroy(attributesDataSource.editLongBarrier(
-                barrierId,
-                categoryId,
-                comment,
-                points)
-                .subscribeOnIO()
-                .doOnError {
-                    errorBody = getError(it)
-                }
-                .observeOnUI()
-                .subscribe(this::onEditeSuccess, this::onError))
+            barrierId,
+            categoryId,
+            comment,
+            points
+        )
+            .subscribeOnIO()
+            .doOnError {
+                errorBody = getError(it)
+            }
+            .observeOnUI()
+            .subscribe(this::onEditeSuccess, this::onError))
     }
 
     private fun onEditeSuccess() {

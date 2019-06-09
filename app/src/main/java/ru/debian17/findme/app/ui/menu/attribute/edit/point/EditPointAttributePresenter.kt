@@ -10,21 +10,22 @@ import ru.debian17.findme.data.model.category.Category
 
 @InjectViewState
 class EditPointAttributePresenter(
-        private val categoriesDataSource: CategoriesDataSource,
-        private val attributesDataSource: AttributesDataSource
+    private val categoriesDataSource: CategoriesDataSource,
+    private val attributesDataSource: AttributesDataSource
 ) :
-        BasePresenter<EditPointAttributeView>() {
+    BasePresenter<EditPointAttributeView>() {
 
     override fun onFirstViewAttach() {
         viewState.showLoading()
         unsubscribeOnDestroy(
-                categoriesDataSource.getCategories()
-                        .subscribeOnIO()
-                        .doOnError {
-                            errorBody = getError(it)
-                        }
-                        .observeOnUI()
-                        .subscribe(this::onCategoriesLoaded, this::onError)
+            categoriesDataSource.getCategories()
+                .subscribeOnIO()
+                .doOnError {
+                    errorBody = getError(it)
+                }
+                .map { list -> list.filter { it.isPoint } }
+                .observeOnUI()
+                .subscribe(this::onCategoriesLoaded, this::onError)
         )
     }
 
@@ -38,22 +39,28 @@ class EditPointAttributePresenter(
         viewState.showError(errorBody?.message)
     }
 
-    fun editLocalBarrier(barrierId: Int,
-                         categoryId: Int,
-                         radius: Double,
-                         comment: String,
-                         latitude: Double,
-                         longitude: Double) {
+    fun editLocalBarrier(
+        barrierId: Int,
+        categoryId: Int,
+        radius: Double,
+        comment: String,
+        latitude: Double,
+        longitude: Double
+    ) {
         viewState.showLoading()
-        unsubscribeOnDestroy(attributesDataSource.editLocalBarrier(barrierId,
+        unsubscribeOnDestroy(
+            attributesDataSource.editLocalBarrier(
+                barrierId,
                 categoryId,
                 radius,
                 comment,
                 latitude,
-                longitude)
+                longitude
+            )
                 .subscribeOnIO()
                 .observeOnUI()
-                .subscribe(this::onEditSuccess, this::onError))
+                .subscribe(this::onEditSuccess, this::onError)
+        )
 
     }
 
